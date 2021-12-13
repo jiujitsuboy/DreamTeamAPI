@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.BeanUtils;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,38 +25,46 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-  private final UserRepository repository;
+  private final TeamService teamService;
+  private final UserRepository userRepository;
   private final UserTokenRepository userTokenRepository;
   private final PasswordEncoder bCryptPasswordEncoder;
   private final JwtManager tokenManager;
 
-  public UserService(UserRepository repository, UserTokenRepository userTokenRepository, PasswordEncoder bCryptPasswordEncoder,
+  public UserService(TeamService teamService, UserRepository userRepository, UserTokenRepository userTokenRepository,
+      PasswordEncoder bCryptPasswordEncoder,
       JwtManager tokenManager) {
-    this.repository = repository;
+    this.teamService = teamService;
+    this.userRepository = userRepository;
     this.userTokenRepository = userTokenRepository;
     this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     this.tokenManager = tokenManager;
   }
 
-  @Transactional
-  public Optional<SignedInUser> createUser(User user) {
-    Integer count = repository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
-    if (count > 0) {
-      throw new GenericAlreadyExistsException("Use different username and email.");
-    }
-    UserEntity userEntity = repository.save(toEntity(user));
-    return Optional.of(createSignedUserWithRefreshToken(userEntity));
+  public User signUp(User user) {
+    UserEntity userEntity = createUser(user);
+    teamService.createTeamForUser(userEntity);
+    return (User) Util.toModel(userEntity);
   }
 
-  public UserEntity findUserByUsername(String username) {
+  @Transactional
+  public SignedInUser signUser(String username, String password) {
+
     if (Strings.isBlank(username)) {
       throw new UsernameNotFoundException("Invalid user.");
     }
+    if (Strings.isBlank(password)) {
+      throw new UsernameNotFoundException("Invalid password.");
+    }
     final String uname = username.trim();
-    Optional<UserEntity> oUserEntity = repository.findByUsername(uname);
+    Optional<UserEntity> oUserEntity = userRepository.findByUsername(uname);
     UserEntity userEntity = oUserEntity.orElseThrow(
-        () -> new UsernameNotFoundException(String.format("Given user(%s) not found.", uname)));
-    return userEntity;
+        () -> new InsufficientAuthenticationException("Unauthorized."));
+
+    if (!bCryptPasswordEncoder.matches(password, userEntity.getPassword())) {
+      throw new InsufficientAuthenticationException("Unauthorized.");
+    }
+    return getSignedInUser(userEntity);
   }
 
   public void removeRefreshToken(RefreshToken refreshToken) {
@@ -83,11 +91,17 @@ public class UserService {
         .orElseThrow(() -> new InvalidRefreshTokenException("Invalid token."));
   }
 
-  private UserEntity toEntity(User user) {
-    UserEntity userEntity = new UserEntity();
-    BeanUtils.copyProperties(user, userEntity);
+  @Transactional
+  protected UserEntity createUser(User user) {
+    Integer count = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
+    if (count > 0) {
+      throw new GenericAlreadyExistsException("Use different username and email.");
+    }
+    UserEntity userEntity = (UserEntity) Util.toEntity(user);
     userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    userRepository.save(userEntity);
     return userEntity;
+    //return createSignedUserWithRefreshToken(userEntity);
   }
 
   private SignedInUser createSignedUserWithRefreshToken(UserEntity userEntity) {
@@ -104,6 +118,7 @@ public class UserService {
         .build());
 
     SignedInUser signedInUser = new SignedInUser();
+    signedInUser.setUserId(userEntity.getId().toString());
     signedInUser.setUserName(userEntity.getUsername());
     signedInUser.setAccessToken(token);
 

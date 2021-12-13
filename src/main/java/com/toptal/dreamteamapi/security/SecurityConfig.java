@@ -3,12 +3,10 @@ package com.toptal.dreamteamapi.security;
 import static com.toptal.dreamteamapi.Constants.API_URL_PREFIX;
 import static com.toptal.dreamteamapi.Constants.AUTHORITY_PREFIX;
 import static com.toptal.dreamteamapi.Constants.H2_URL_PREFIX;
-import static com.toptal.dreamteamapi.Constants.PRODUCTS_URL;
 import static com.toptal.dreamteamapi.Constants.REFRESH_URL;
 import static com.toptal.dreamteamapi.Constants.ROLE_CLAIM;
 import static com.toptal.dreamteamapi.Constants.SIGNUP_URL;
 import static com.toptal.dreamteamapi.Constants.TOKEN_URL;
-import static com.toptal.dreamteamapi.Constants.API_URL_PREFIX;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toptal.dreamteamapi.entity.RoleEnum;
@@ -92,7 +90,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.DELETE, TOKEN_URL).permitAll()
         .antMatchers(HttpMethod.POST, SIGNUP_URL).permitAll()
         .antMatchers(HttpMethod.POST, REFRESH_URL).permitAll()
-        .antMatchers(HttpMethod.GET, PRODUCTS_URL).permitAll()
         .antMatchers(H2_URL_PREFIX).permitAll()
         .mvcMatchers(HttpMethod.POST, "/api/v1/addresses/**")
         .hasAuthority(RoleEnum.ADMIN.getAuthority())
@@ -110,7 +107,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     converter.setJwtGrantedAuthoritiesConverter(authorityConverter);
     return converter;
   }
-
 
   @Override
   public void configure(AuthenticationManagerBuilder auth) throws Exception {

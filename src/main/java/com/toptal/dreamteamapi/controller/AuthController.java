@@ -23,19 +23,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
   private final UserService service;
-  private final PasswordEncoder passwordEncoder;
 
-  public AuthController(UserService service, PasswordEncoder passwordEncoder) {
+  public AuthController(UserService service) {
+
     this.service = service;
-    this.passwordEncoder = passwordEncoder;
   }
 
   @PostMapping(
-      value = "/auth/token/refresh",
+      value = "/token/refresh",
       produces = {"application/json"},
       consumes = {"application/json"}
   )
@@ -44,22 +43,24 @@ public class AuthController {
   }
 
   @PostMapping(
-      value = "/auth/token",
+      value = "/token",
       produces = {"application/json"},
       consumes = {"application/json"}
   )
-  public ResponseEntity<SignedInUser> signIn(@Valid @RequestBody(required = false) SignInReq signInReq) {
-
-    UserEntity userEntity = service.findUserByUsername(signInReq.getUsername());
-    if (passwordEncoder.matches(signInReq.getPassword(), userEntity.getPassword())) {
-      return ok(service.getSignedInUser(userEntity));
-    } else {
-      throw new InsufficientAuthenticationException("Unauthorized.");
+  public ResponseEntity<?> signIn(@Valid @RequestBody(required = false) SignInReq signInReq) {
+    try{
+      return  status(HttpStatus.ACCEPTED).body(service.signUser(signInReq.getUsername(), signInReq.getPassword()));
+    }
+    catch(UsernameNotFoundException ex){
+      return status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    catch(InsufficientAuthenticationException ex){
+      return status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
   }
 
   @DeleteMapping(
-      value = "/auth/token",
+      value = "/token",
       consumes = {"application/json"}
   )
   public ResponseEntity<Void> signOut(@Valid @RequestBody(required = false) RefreshToken refreshToken) {
@@ -75,8 +76,8 @@ public class AuthController {
       produces = {"application/json"},
       consumes = {"application/json"}
   )
-  public ResponseEntity<SignedInUser> signUp(@Valid @RequestBody(required = false) User user) {
-    return status(HttpStatus.CREATED).body(service.createUser(user).get());
+  public ResponseEntity<User> signUp(@Valid @RequestBody(required = false) User user) {
+    return status(HttpStatus.CREATED).body(service.signUp(user));
   }
 
 }

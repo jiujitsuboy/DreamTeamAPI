@@ -43,7 +43,10 @@ public class PlayerEntity {
   @Column(name = "AGE")
   private byte age;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "team_id", nullable = false)
+  @Column(name = "VALUE")
+  private long value;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "team_id")
   private TeamEntity team;
 }

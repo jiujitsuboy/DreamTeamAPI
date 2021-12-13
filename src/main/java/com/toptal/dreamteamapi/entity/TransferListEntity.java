@@ -24,8 +24,6 @@ public class TransferListEntity {
   @OneToOne
   private PlayerEntity player;
 
-  @NotNull(message = "Value is required.")
-  @Basic(optional = false)
-  @Column(name = "VALUE")
-  private String value;
+  @Column(name = "VALUE", nullable = false)
+  private long value;
 }

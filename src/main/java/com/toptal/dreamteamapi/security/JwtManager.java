@@ -27,7 +27,7 @@ public class JwtManager {
   public String create(UserDetails principal) {
     final long now = System.currentTimeMillis();
     return JWT.create()
-        .withIssuer("Modern API Development with Spring and Spring Boot")
+        .withIssuer("Dream Team API")
         .withSubject(principal.getUsername())
         .withClaim(ROLE_CLAIM,
             principal.getAuthorities().stream().map(GrantedAuthority::getAuthority)

@@ -1,7 +1,7 @@
 package com.toptal.dreamteamapi.entity;
 
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -45,6 +45,6 @@ public class TeamEntity {
   @OneToOne
   private UserEntity user;
 
-  @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<PlayerEntity> players;
+  @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<PlayerEntity> players;
 }

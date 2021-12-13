@@ -1,13 +1,14 @@
 package com.toptal.dreamteamapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.UUID;
 import lombok.Data;
 
 @Data
 public class User {
 
   @JsonProperty("id")
-  private String id;
+  private UUID id;
   @JsonProperty("username")
   private String username;
   @JsonProperty("firstName")
