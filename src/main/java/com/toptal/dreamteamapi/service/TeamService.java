@@ -72,17 +72,13 @@ public class TeamService {
     teamRepository.save(teamEntity);
   }
 
-  public Team getUserTeam(String userId) {
-    TeamEntity teamEntity = teamRepository.findByUserId(UUID.fromString(userId))
+  public TeamEntity getUserTeam(String userId) {
+    return teamRepository.findByUserId(UUID.fromString(userId))
         .orElseThrow(() -> new NoSuchTeamException(String.format("User with id %s doesn't not have team", userId)));
-    return (Team) Util.toModel(teamEntity);
   }
 
-  public List<Team> getAllTeams() {
-    List<Team> teams = new ArrayList<>();
-    Iterable<TeamEntity> teamEntity = teamRepository.findAll();
-    teamEntity.forEach(team -> teams.add((Team) Util.toModel(team)));
-    return teams;
+  public Iterable<TeamEntity> getAllTeams() {
+    return teamRepository.findAll();
   }
 
   @Transactional
@@ -90,11 +86,10 @@ public class TeamService {
     TeamEntity teamEntity = teamRepository.findById(team.getId())
         .orElseThrow(() -> new NoSuchTeamException(String.format("Team with id %s doesn't not exits", team.getId())));
 
-    int countryIndex = Util.COUNTRIES.indexOf(team.getCountry());
     teamEntity.setName(team.getName());
-    if (countryIndex != -1) {
-      teamEntity.setCountry(Util.COUNTRIES.get(countryIndex));
-    }
+
+    teamEntity.setCountry(team.getCountry());
+
     teamRepository.save(teamEntity);
   }
 
@@ -110,18 +105,19 @@ public class TeamService {
           String.format("Team %s doesn't have enough budget %s to pay %s for player %s", teamId, newTeamEntity.getBudget(),
               playerEntity.getValue(), playerId));
     }
-    else{
-      newTeamEntity.setBudget(newTeamEntity.getBudget()-playerEntity.getValue());
-    }
+    newTeamEntity.setBudget(newTeamEntity.getBudget() - playerEntity.getValue());
+    oldTeamEntity.setBudget(oldTeamEntity.getBudget() + playerEntity.getValue());
 
     oldTeamEntity.setPlayers(
         oldTeamEntity.getPlayers().stream().filter(player -> player.getId().equals(playerId)).collect(Collectors.toList()));
     teamRepository.save(oldTeamEntity);
 
     playerEntity.setTeam(newTeamEntity);
-    playerEntity.setValue((long) (playerEntity.getValue() + (playerEntity.getValue() * (10 + Math.random() * 90)/100s)));
+    playerEntity.setValue((long) (playerEntity.getValue() + (playerEntity.getValue() * (10 + Math.random() * 90) / 100)));
     playerRepository.save(playerEntity);
 
+    newTeamEntity.setValue(newTeamEntity.getValue() + playerEntity.getValue());
+    oldTeamEntity.setValue(oldTeamEntity.getValue() + playerEntity.getValue());
     newTeamEntity.getPlayers().add(playerEntity);
     teamRepository.save(newTeamEntity);
 

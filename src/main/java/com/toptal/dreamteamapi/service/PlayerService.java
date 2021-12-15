@@ -38,6 +38,7 @@ public class PlayerService {
     playerEntity.setAge(age);
     playerEntity.setValue(PLAYER_VALUE);
     playerEntity.setTeam(teamEntity);
+    playerEntity.setType(playerType);
 
     playerRepository.save(playerEntity);
 
@@ -45,19 +46,16 @@ public class PlayerService {
   }
 
   @Transactional
-  public Player updatePlayer(String playerId, Player player) {
+  public PlayerEntity updatePlayer(String playerId, Player player) {
     PlayerEntity playerEntity = getPlayerById(UUID.fromString(playerId));
-
-    int countryIndex = Util.COUNTRIES.indexOf(player.getCountry());
 
     playerEntity.setFirstname(player.getFirstname());
     playerEntity.setLastname(player.getLastname());
-    if (countryIndex != -1) {
-      playerEntity.setCountry(Util.COUNTRIES.get(countryIndex));
-    }
+    playerEntity.setCountry(player.getCountry());
 
     playerRepository.save(playerEntity);
-    return (Player) Util.toModel(playerEntity);
+
+    return playerEntity;
   }
 
   public PlayerEntity getPlayerById(UUID playerId) {
@@ -65,10 +63,10 @@ public class PlayerService {
         .orElseThrow(() -> new NoSuchPlayerException(String.format("Player with id %s doesn't exists", playerId)));
   }
 
-  public List<Player> getAllPlayers() {
+  public Iterable<PlayerEntity> getAllPlayers() {
     List<Player> players = new ArrayList<>();
     Iterable<PlayerEntity> playerEntities =  playerRepository.findAll();
     playerEntities.forEach(player->players.add((Player) Util.toModel(player)));
-    return players;
+    return playerEntities;
   }
 }

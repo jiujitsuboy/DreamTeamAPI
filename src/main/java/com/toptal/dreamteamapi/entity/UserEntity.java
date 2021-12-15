@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -43,4 +44,7 @@ public class UserEntity {
   @Column(name = "ROLE")
   @Enumerated(EnumType.STRING)
   private RoleEnum role = RoleEnum.USER;
+
+  @OneToOne(mappedBy = "user")
+  private TeamEntity team;
 }

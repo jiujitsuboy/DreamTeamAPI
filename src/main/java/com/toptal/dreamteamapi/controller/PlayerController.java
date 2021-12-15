@@ -4,6 +4,7 @@ import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
 import com.toptal.dreamteamapi.exception.NoSuchPlayerException;
+import com.toptal.dreamteamapi.hateoas.PlayerRepresentationModelAssembler;
 import com.toptal.dreamteamapi.model.Player;
 import com.toptal.dreamteamapi.service.PlayerService;
 import com.toptal.dreamteamapi.service.Util;
@@ -25,9 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlayerController {
 
   private final PlayerService service;
+  private final PlayerRepresentationModelAssembler playerAssembler;
 
-  public PlayerController(PlayerService service) {
+  public PlayerController(PlayerService service, PlayerRepresentationModelAssembler playerAssembler) {
     this.service = service;
+    this.playerAssembler = playerAssembler;
   }
 
   @PutMapping(
@@ -36,7 +39,7 @@ public class PlayerController {
       consumes = {"application/json"}
   )
   public ResponseEntity<Player> updatePlayer(@PathVariable("playerId") String playerId, @Valid @RequestBody(required = true) Player player) {
-    return status(HttpStatus.ACCEPTED).body(service.updatePlayer(playerId,player));
+    return status(HttpStatus.ACCEPTED).body(playerAssembler.toModel(service.updatePlayer(playerId,player)));
   }
 
   @GetMapping(
@@ -46,9 +49,8 @@ public class PlayerController {
   )
   public ResponseEntity<Player> getPlayer(@PathVariable("playerId") String playerId) {
 
-    try{
-      Player player = (Player) Util.toModel(service.getPlayerById(UUID.fromString(playerId)));
-      return ok(player);
+    try{;
+      return ok(playerAssembler.toModel(service.getPlayerById(UUID.fromString(playerId))));
     }
     catch (NoSuchPlayerException ex){
       return status(HttpStatus.BAD_REQUEST).build();
@@ -62,6 +64,6 @@ public class PlayerController {
       consumes = {"application/json"}
   )
   public ResponseEntity<List<Player>> getAllPlayer() {
-      return ok(service.getAllPlayers());
+      return ok(playerAssembler.toListModel(service.getAllPlayers()));
   }
 }

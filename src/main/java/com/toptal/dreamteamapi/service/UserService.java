@@ -41,10 +41,10 @@ public class UserService {
     this.tokenManager = tokenManager;
   }
 
-  public User signUp(User user) {
+  public UserEntity signUp(User user) {
     UserEntity userEntity = createUser(user);
     teamService.createTeamForUser(userEntity);
-    return (User) Util.toModel(userEntity);
+    return userEntity;
   }
 
   @Transactional
@@ -57,7 +57,7 @@ public class UserService {
       throw new UsernameNotFoundException("Invalid password.");
     }
     final String uname = username.trim();
-    Optional<UserEntity> oUserEntity = userRepository.findByUsername(uname);
+    Optional<UserEntity> oUserEntity = findUserByUserName(uname);
     UserEntity userEntity = oUserEntity.orElseThrow(
         () -> new InsufficientAuthenticationException("Unauthorized."));
 
@@ -91,6 +91,10 @@ public class UserService {
         .orElseThrow(() -> new InvalidRefreshTokenException("Invalid token."));
   }
 
+  public Optional<UserEntity> findUserByUserName(String username){
+    return userRepository.findByUsername(username);
+  }
+
   @Transactional
   protected UserEntity createUser(User user) {
     Integer count = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
@@ -118,7 +122,6 @@ public class UserService {
         .build());
 
     SignedInUser signedInUser = new SignedInUser();
-    signedInUser.setUserId(userEntity.getId().toString());
     signedInUser.setUserName(userEntity.getUsername());
     signedInUser.setAccessToken(token);
 

@@ -4,7 +4,8 @@ import static org.springframework.http.ResponseEntity.accepted;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
-import com.toptal.dreamteamapi.entity.UserEntity;
+import com.toptal.dreamteamapi.exception.InvalidRefreshTokenException;
+import com.toptal.dreamteamapi.hateoas.UserRepresentationModelAssembler;
 import com.toptal.dreamteamapi.model.RefreshToken;
 import com.toptal.dreamteamapi.model.SignInReq;
 import com.toptal.dreamteamapi.model.SignedInUser;
@@ -15,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,10 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
   private final UserService service;
+  private final UserRepresentationModelAssembler userAssembler;
 
-  public AuthController(UserService service) {
-
+  public AuthController(UserService service, UserRepresentationModelAssembler userAssembler) {
     this.service = service;
+    this.userAssembler = userAssembler;
   }
 
   @PostMapping(
@@ -49,7 +50,7 @@ public class AuthController {
   )
   public ResponseEntity<?> signIn(@Valid @RequestBody(required = false) SignInReq signInReq) {
     try{
-      return  status(HttpStatus.ACCEPTED).body(service.signUser(signInReq.getUsername(), signInReq.getPassword()));
+      return  status(HttpStatus.ACCEPTED).body(userAssembler.toModel(service.signUser(signInReq.getUserName(), signInReq.getPassword())));
     }
     catch(UsernameNotFoundException ex){
       return status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -67,8 +68,13 @@ public class AuthController {
     // We are using removeToken API for signout.
     // Ideally you would like to get tgit she user ID from Logged in user's request
     // and remove the refresh token based on retrieved user id from request.
-    service.removeRefreshToken(refreshToken);
-    return accepted().build();
+    try {
+      service.removeRefreshToken(refreshToken);
+      return accepted().build();
+    }
+    catch(InvalidRefreshTokenException ex){
+      return status(HttpStatus.BAD_REQUEST).build();
+    }
   }
 
   @PostMapping(
@@ -77,7 +83,7 @@ public class AuthController {
       consumes = {"application/json"}
   )
   public ResponseEntity<User> signUp(@Valid @RequestBody(required = false) User user) {
-    return status(HttpStatus.CREATED).body(service.signUp(user));
+    return status(HttpStatus.CREATED).body(userAssembler.toModel(service.signUp(user)));
   }
 
 }

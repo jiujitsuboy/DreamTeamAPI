@@ -16,7 +16,7 @@ public class Constants {
   public static final String AUTHORIZATION = "Authorization";
   public static final String TOKEN_PREFIX = "Bearer ";
   public static final String SECRET_KEY = "SECRET_KEY";
-  public static final long EXPIRATION_TIME = 60_000; // 15 mins
+  public static final long EXPIRATION_TIME = 900_000; // 15 mins
   public static final String ROLE_CLAIM = "roles";
   public static final String AUTHORITY_PREFIX = "ROLE_";
 }

@@ -5,7 +5,6 @@ import com.toptal.dreamteamapi.entity.TeamEntity;
 import com.toptal.dreamteamapi.entity.TransferListEntity;
 import com.toptal.dreamteamapi.entity.UserEntity;
 import com.toptal.dreamteamapi.model.Player;
-import com.toptal.dreamteamapi.model.SignedInUser;
 import com.toptal.dreamteamapi.model.Team;
 import com.toptal.dreamteamapi.model.TransferList;
 import com.toptal.dreamteamapi.model.User;
@@ -48,8 +47,12 @@ public class Util {
     } else if (entity instanceof PlayerEntity) {
       model = new Player();
       TeamEntity teamEntity = ((PlayerEntity) entity).getTeam();
+      UserEntity userEntity = ((PlayerEntity) entity).getTeam().getUser();
       Team team = new Team();
+      User user = new User();
       BeanUtils.copyProperties(teamEntity, team);
+      BeanUtils.copyProperties(userEntity, user);
+      team.setUser(user);
       ((Player) model).setTeam(team);
     } else if (entity instanceof UserEntity) {
       model = new User();
@@ -59,10 +62,5 @@ public class Util {
     }
     BeanUtils.copyProperties(entity, model);
     return model;
-  }
-
-  public static <E, M> Object updateEntity(E entity, M model) {
-    BeanUtils.copyProperties(model, entity);
-    return entity;
   }
 }

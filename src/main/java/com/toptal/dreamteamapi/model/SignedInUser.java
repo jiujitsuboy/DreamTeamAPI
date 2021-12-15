@@ -8,8 +8,6 @@ import org.springframework.hateoas.RepresentationModel;
 @Data
 public class SignedInUser extends RepresentationModel<SignedInUser> implements Serializable {
 
-  @JsonProperty("userId")
-  private String userId;
   @JsonProperty("refreshToken")
   private String refreshToken;
   @JsonProperty("accessToken")

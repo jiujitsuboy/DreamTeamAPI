@@ -10,6 +10,7 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +38,7 @@ public class TransferListController {
   }
 
   @PostMapping(
-      value = "/put-on-sale/{playerId}",
+      value = "/transfer-list/{playerId}",
       produces = {"application/json"},
       consumes = {"application/json"}
   )
@@ -45,8 +46,8 @@ public class TransferListController {
     return status(HttpStatus.ACCEPTED).body(service.putOnSalePlayer(playerId));
   }
 
-  @PostMapping(
-      value = "/buy",
+  @DeleteMapping(
+      value = "/transfer-list",
       produces = {"application/json"},
       consumes = {"application/json"}
   )

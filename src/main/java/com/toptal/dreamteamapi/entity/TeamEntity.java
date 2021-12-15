@@ -45,6 +45,6 @@ public class TeamEntity {
   @OneToOne
   private UserEntity user;
 
-  @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
   private List<PlayerEntity> players;
 }

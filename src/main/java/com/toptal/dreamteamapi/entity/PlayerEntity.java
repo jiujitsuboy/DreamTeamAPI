@@ -1,10 +1,13 @@
 package com.toptal.dreamteamapi.entity;
 
 
+import com.toptal.dreamteamapi.model.PlayerType;
 import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -34,6 +37,11 @@ public class PlayerEntity {
   @Basic(optional = false)
   @Column(name = "LAST_NAME")
   private String lastname;
+
+  @Column(name = "TYPE")
+  @Basic(optional = false)
+  @Enumerated(EnumType.STRING)
+  private PlayerType type;
 
   @NotNull(message = "Country is required.")
   @Basic(optional = false)

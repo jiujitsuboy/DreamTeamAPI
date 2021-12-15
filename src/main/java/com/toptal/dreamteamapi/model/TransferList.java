@@ -1,13 +1,11 @@
 package com.toptal.dreamteamapi.model;
 
-import com.toptal.dreamteamapi.entity.PlayerEntity;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.OneToOne;
 import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
-public class TransferList {
+public class TransferList extends RepresentationModel<TransferList> {
   private UUID id;
   private Player player;
   private long value;

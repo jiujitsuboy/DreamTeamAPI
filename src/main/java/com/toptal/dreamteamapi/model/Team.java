@@ -5,11 +5,12 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Team {
+public class Team  extends RepresentationModel<Team> {
 
   private UUID id;
   private String name;

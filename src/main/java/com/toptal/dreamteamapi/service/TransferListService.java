@@ -39,8 +39,9 @@ public class TransferListService {
   public Player buyPlayer(String playerId, String teamId) {
     TransferListEntity transferListEntity = transferListRepository.findByPlayerId(UUID.fromString(playerId))
         .orElseThrow(() -> new NoSuchPlayerException(String.format("Player with id %s doesn't exists in Transfer List", playerId)));
+    Player player = teamService.buyPlayer(playerId, teamId);
     transferListRepository.delete(transferListEntity);
-    return teamService.buyPlayer(playerId, teamId);
+    return player;
   }
 
   public List<TransferList> getTransferList(){
