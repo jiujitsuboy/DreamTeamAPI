@@ -70,7 +70,7 @@ Complete coverage of the following layers:
 
 ![](images/coverage.png)
 
-Web version
+#### Web version
 
 ![](images/coverageReport.png)
 
