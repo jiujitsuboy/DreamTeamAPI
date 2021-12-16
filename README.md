@@ -37,13 +37,28 @@ The following list depict the available endpoints of the API:
 
 ### API features
 
-* Java/Spring boot.
+* Java/Spring boot maven project.
 * In memory DB (H2)
 * Oauth2 Authentication/Authorization
 * Hateoas support
 * Etag support
 * [Swagger documentation](http://localhost:8082/v2/api-docs) and [Swagger UI](http://localhost:8082/swagger-ui.html)
 * [PostMan collection](postman/Total-DreamTeam.postman_collection.json)
+
+### How to run the API
+
+* From the console line in the root folder of the project execute the following command to generate the .jar file.
+  ```
+  ./mvnw clean package
+  ```
+* Now run the application by:
+
+   ```
+   ./mvnw spring-boot:run
+   ```
+* The API by default will be reachable in the following URL *http://localhost:8082*
+ 
+
 
 ### Code Coverage
 Complete coverage of the following layers:
@@ -59,7 +74,7 @@ Web version
 
 ![](images/coverageReport.png)
 
-###Swagger UI
+### Swagger UI
 
 ![](images/swagger-UI.png)
 
