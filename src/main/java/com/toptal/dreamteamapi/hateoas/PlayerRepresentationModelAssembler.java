@@ -26,6 +26,7 @@ public class PlayerRepresentationModelAssembler extends RepresentationModelAssem
   @Override
   public Player toModel(PlayerEntity entity) {
     Player player= (Player)Util.toModel(entity);
+    player.getTeam().getUser().setPassword("Ciphered...");
     player.add(linkTo(methodOn(TeamController.class).getTeam(player.getTeam().getUser().getId().toString())).withRel("user-team"));
     return player;
   }

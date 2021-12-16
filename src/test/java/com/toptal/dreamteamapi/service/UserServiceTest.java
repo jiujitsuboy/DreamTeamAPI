@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
+import com.toptal.dreamteamapi.TestConstants;
 import com.toptal.dreamteamapi.entity.UserEntity;
 import com.toptal.dreamteamapi.entity.UserTokenEntity;
 import com.toptal.dreamteamapi.exception.GenericAlreadyExistsException;
@@ -48,29 +49,21 @@ class UserServiceTest {
   @Test
   public void signUp() {
     final int ZERO_RECORD = 0;
-    final String cypheredPassword = "{bcrypt}$2a$10$Pb8XsVlOE493g6y//MFQ1OkiVjYQBT4VdkUk7s0b0vNI7m7LBliRG";
-    String username = "scott1";
 
     UUID userUUID = UUID.randomUUID();
-    User user = new User();
-    user.setId(userUUID);
-    user.setUsername(username);
-    user.setPassword("tiger");
-    user.setFirstName("Bruce");
-    user.setLastName("Scott");
-    user.setEmail("bruce1@scott.db");
+    User user = TestConstants.getTestUser(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
 
     doNothing().when(teamService).createTeamForUser(any(UserEntity.class));
     when(userRepository.findByUsernameOrEmail(anyString(), anyString())).thenReturn(ZERO_RECORD);
-    when(bCryptPasswordEncoder.encode(anyString())).thenReturn(cypheredPassword);
+    when(bCryptPasswordEncoder.encode(anyString())).thenReturn(TestConstants.CYPHERED_PASSWORD);
     when(userRepository.save(any(UserEntity.class))).thenReturn(null);
 
     UserEntity returnedUserEntity = classUnderTest.signUp(user);
 
     assertNotNull(returnedUserEntity);
     assertEquals(returnedUserEntity.getId(), userUUID);
-    assertEquals(returnedUserEntity.getPassword(), cypheredPassword);
-    assertEquals(returnedUserEntity.getUsername(), username);
+    assertEquals(returnedUserEntity.getPassword(), TestConstants.CYPHERED_PASSWORD);
+    assertEquals(returnedUserEntity.getUsername(), TestConstants.USER_NAME_A);
 
   }
 
@@ -78,14 +71,7 @@ class UserServiceTest {
   public void signUpGenericAlreadyExistsException() {
     final int ONE_RECORD = 1;
 
-    UUID userUUID = UUID.randomUUID();
-    User user = new User();
-    user.setId(userUUID);
-    user.setUsername("scott1");
-    user.setPassword("tiger");
-    user.setFirstName("Bruce");
-    user.setLastName("Scott");
-    user.setEmail("bruce1@scott.db");
+    User user = TestConstants.getTestUser(UUID.randomUUID(),TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
 
     when(userRepository.findByUsernameOrEmail(anyString(), anyString())).thenReturn(ONE_RECORD);
 
@@ -99,13 +85,7 @@ class UserServiceTest {
     final boolean passwordsMatch = true;
     final String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzY290dDEiLCJyb2xlcyI6WyJVU0VSIl0sImlzcyI6IkRyZWFtIFRlYW0gQVBJIiwiZXhwIjoxNjM5NDQ1NjA1LCJpYXQiOjE2Mzk0NDQ3MDV9.jFJV4vhRMllJf1SaR5An9GrSB10fX66GCYOJYbj0t3JDwSmN_b1DYrkseCJQgDbWj6pFF8gGV0gb19N99dAga-x6w3rK7bjL0zO7y03bhXYEWSOqCzSlw8FqiFGSTpcNqykU6hLFn8AuiAIGjT1Y9jyhPhbKlb7Lq7IhUcmJrMJsHkXXBlk5237NTtp_LZjK0Kl3gZm7vmkdYInliWbVsNr4ehc24vcfykMPMHgZugpSYyN62b4O58HWYHnBwuxYYWtkyRFyCl_z75K8GsOyuOZ80HqsjDHXMuK1v7LVlOgy5tJsnDypqJIBe1-hj-KWyvSyZnXpUQqTTGby2cRKcBGH0QYSWiy1pASGNjYPcqAHa2j4UFQwQFKSO6XNO6BKtQ0i6xiTgnF0tOKRK1Y4Orjegr6KmQvYom5ZX6rcTZniH86VSiQVTq4cAzKTzTsfguv_GGzwqfv3gDkwjhH1Vs1CDDXLLb5OXudnpu62o4PBPlUUKbSwE9ntj1aDWDdTsxl86Jsx3fMMOvkYHY9Bba8T82JNIlmFNQXF9sscBdUNyQx55UMLbEz7N72KI1DWgU2UU5Qh2KIhdkD7yL3CDL5-B7y7vBe3Etb1Sc4HZfAHNFjcFXK1elaIzZUFGaqswLswy8wRbYyU7Qa29pesGsKwmXNej8h6fpzoQZKy6hg";
 
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
+    UserEntity userEntity = TestConstants.getTestUserEntity(UUID.randomUUID(),TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
 
     when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(userEntity));
     when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(passwordsMatch);
@@ -126,14 +106,14 @@ class UserServiceTest {
   public void signUserUsernameNotFoundException() {
 
     String userName = null;
-    String password = "tiger";
+    String password = TestConstants.USER_PASSWORD_A;
 
     assertThrows(UsernameNotFoundException.class, () -> classUnderTest.signUser(userName, password));
   }
 
   @Test
   public void signUserUserpasswordNotFoundException() {
-    String userName = "scott1";
+    String userName = TestConstants.USER_NAME_A;
     String password = null;
 
     assertThrows(UsernameNotFoundException.class, () -> classUnderTest.signUser(userName, password));
@@ -141,8 +121,9 @@ class UserServiceTest {
 
   @Test
   public void signUserInsufficientAuthenticationException() {
-    String userName = "scott1";
-    String password = "tiger";
+
+    String userName = TestConstants.USER_NAME_A;
+    String password = TestConstants.USER_PASSWORD_A;
 
     when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
@@ -153,33 +134,23 @@ class UserServiceTest {
   @Test
   public void getAccessToken() {
 
-    String userName = "scott1";
-    final String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzY290dDEiLCJyb2xlcyI6WyJVU0VSIl0sImlzcyI6IkRyZWFtIFRlYW0gQVBJIiwiZXhwIjoxNjM5NDQ1NjA1LCJpYXQiOjE2Mzk0NDQ3MDV9.jFJV4vhRMllJf1SaR5An9GrSB10fX66GCYOJYbj0t3JDwSmN_b1DYrkseCJQgDbWj6pFF8gGV0gb19N99dAga-x6w3rK7bjL0zO7y03bhXYEWSOqCzSlw8FqiFGSTpcNqykU6hLFn8AuiAIGjT1Y9jyhPhbKlb7Lq7IhUcmJrMJsHkXXBlk5237NTtp_LZjK0Kl3gZm7vmkdYInliWbVsNr4ehc24vcfykMPMHgZugpSYyN62b4O58HWYHnBwuxYYWtkyRFyCl_z75K8GsOyuOZ80HqsjDHXMuK1v7LVlOgy5tJsnDypqJIBe1-hj-KWyvSyZnXpUQqTTGby2cRKcBGH0QYSWiy1pASGNjYPcqAHa2j4UFQwQFKSO6XNO6BKtQ0i6xiTgnF0tOKRK1Y4Orjegr6KmQvYom5ZX6rcTZniH86VSiQVTq4cAzKTzTsfguv_GGzwqfv3gDkwjhH1Vs1CDDXLLb5OXudnpu62o4PBPlUUKbSwE9ntj1aDWDdTsxl86Jsx3fMMOvkYHY9Bba8T82JNIlmFNQXF9sscBdUNyQx55UMLbEz7N72KI1DWgU2UU5Qh2KIhdkD7yL3CDL5-B7y7vBe3Etb1Sc4HZfAHNFjcFXK1elaIzZUFGaqswLswy8wRbYyU7Qa29pesGsKwmXNej8h6fpzoQZKy6hg";
-    final String refreshToken = "26rvap1cr3maf85akd9jb27c7dlrlkfn82hn3rahrb9qhr0rcmtl82jjt75tapoqtqktkh6rgdicb7mm1i38qqhdpgb7v8q3omoffu7dj1o8is3h763o54l978tfp95v";
+    RefreshToken refreshTokenModel = new RefreshToken(TestConstants.REFRESH_TOKEN);
 
-    RefreshToken refreshTokenModel = new RefreshToken(refreshToken);
-
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername(userName);
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
+    UserEntity userEntity = TestConstants.getTestUserEntity(UUID.randomUUID(),TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
 
     UserTokenEntity userTokenEntity = new UserTokenEntity();
     userTokenEntity.setId(UUID.randomUUID());
     userTokenEntity.setUser(userEntity);
-    userTokenEntity.setRefreshToken(refreshToken);
+    userTokenEntity.setRefreshToken(TestConstants.REFRESH_TOKEN);
 
     when(userTokenRepository.findByRefreshToken(anyString())).thenReturn(Optional.of(userTokenEntity));
-    when(tokenManager.create(any(org.springframework.security.core.userdetails.User.class))).thenReturn(accessToken);
+    when(tokenManager.create(any(org.springframework.security.core.userdetails.User.class))).thenReturn(TestConstants.ACCESS_TOKEN);
     Optional<SignedInUser> returnedOptionalSignedInUser = classUnderTest.getAccessToken(refreshTokenModel);
 
     assertTrue(returnedOptionalSignedInUser.isPresent());
-    assertEquals(returnedOptionalSignedInUser.get().getUserName(), userName);
-    assertEquals(returnedOptionalSignedInUser.get().getAccessToken(), accessToken);
-    assertEquals(returnedOptionalSignedInUser.get().getRefreshToken(), refreshToken);
+    assertEquals(returnedOptionalSignedInUser.get().getUserName(), TestConstants.USER_NAME_A);
+    assertEquals(returnedOptionalSignedInUser.get().getAccessToken(), TestConstants.ACCESS_TOKEN);
+    assertEquals(returnedOptionalSignedInUser.get().getRefreshToken(), TestConstants.REFRESH_TOKEN);
   }
 
   @Test
@@ -192,31 +163,19 @@ class UserServiceTest {
     when(userTokenRepository.findByRefreshToken(anyString())).thenReturn(Optional.empty());
 
     assertThrows(InvalidRefreshTokenException.class, () -> classUnderTest.getAccessToken(refreshTokenModel));
-
-
   }
 
   @Test
   public void removeRefreshToken() {
 
-    String userName = "scott1";
-    final String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzY290dDEiLCJyb2xlcyI6WyJVU0VSIl0sImlzcyI6IkRyZWFtIFRlYW0gQVBJIiwiZXhwIjoxNjM5NDQ1NjA1LCJpYXQiOjE2Mzk0NDQ3MDV9.jFJV4vhRMllJf1SaR5An9GrSB10fX66GCYOJYbj0t3JDwSmN_b1DYrkseCJQgDbWj6pFF8gGV0gb19N99dAga-x6w3rK7bjL0zO7y03bhXYEWSOqCzSlw8FqiFGSTpcNqykU6hLFn8AuiAIGjT1Y9jyhPhbKlb7Lq7IhUcmJrMJsHkXXBlk5237NTtp_LZjK0Kl3gZm7vmkdYInliWbVsNr4ehc24vcfykMPMHgZugpSYyN62b4O58HWYHnBwuxYYWtkyRFyCl_z75K8GsOyuOZ80HqsjDHXMuK1v7LVlOgy5tJsnDypqJIBe1-hj-KWyvSyZnXpUQqTTGby2cRKcBGH0QYSWiy1pASGNjYPcqAHa2j4UFQwQFKSO6XNO6BKtQ0i6xiTgnF0tOKRK1Y4Orjegr6KmQvYom5ZX6rcTZniH86VSiQVTq4cAzKTzTsfguv_GGzwqfv3gDkwjhH1Vs1CDDXLLb5OXudnpu62o4PBPlUUKbSwE9ntj1aDWDdTsxl86Jsx3fMMOvkYHY9Bba8T82JNIlmFNQXF9sscBdUNyQx55UMLbEz7N72KI1DWgU2UU5Qh2KIhdkD7yL3CDL5-B7y7vBe3Etb1Sc4HZfAHNFjcFXK1elaIzZUFGaqswLswy8wRbYyU7Qa29pesGsKwmXNej8h6fpzoQZKy6hg";
-    final String refreshToken = "26rvap1cr3maf85akd9jb27c7dlrlkfn82hn3rahrb9qhr0rcmtl82jjt75tapoqtqktkh6rgdicb7mm1i38qqhdpgb7v8q3omoffu7dj1o8is3h763o54l978tfp95v";
+    RefreshToken refreshTokenModel = new RefreshToken(TestConstants.REFRESH_TOKEN);
 
-    RefreshToken refreshTokenModel = new RefreshToken(refreshToken);
-
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername(userName);
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
+    UserEntity userEntity = TestConstants.getTestUserEntity(UUID.randomUUID(),TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
 
     UserTokenEntity userTokenEntity = new UserTokenEntity();
     userTokenEntity.setId(UUID.randomUUID());
     userTokenEntity.setUser(userEntity);
-    userTokenEntity.setRefreshToken(refreshToken);
+    userTokenEntity.setRefreshToken(TestConstants.REFRESH_TOKEN);
 
     when(userTokenRepository.findByRefreshToken(anyString())).thenReturn(Optional.of(userTokenEntity));
     doNothing().when(userTokenRepository).delete(any(UserTokenEntity.class));
@@ -229,9 +188,8 @@ class UserServiceTest {
 
   @Test
   public void removeRefreshTokenInvalidRefreshTokenException() {
-    final String refreshToken = "26rvap1cr3maf85akd9jb27c7dlrlkfn82hn3rahrb9qhr0rcmtl82jjt75tapoqtqktkh6rgdicb7mm1i38qqhdpgb7v8q3omoffu7dj1o8is3h763o54l978tfp95v";
 
-    RefreshToken refreshTokenModel = new RefreshToken(refreshToken);
+    RefreshToken refreshTokenModel = new RefreshToken(TestConstants.REFRESH_TOKEN);
 
     when(userTokenRepository.findByRefreshToken(anyString())).thenReturn(Optional.empty());
     assertThrows(InvalidRefreshTokenException.class, () -> classUnderTest.removeRefreshToken(refreshTokenModel));

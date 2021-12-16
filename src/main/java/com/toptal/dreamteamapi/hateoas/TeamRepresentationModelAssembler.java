@@ -32,11 +32,13 @@ public class TeamRepresentationModelAssembler extends RepresentationModelAssembl
   @Override
   public Team toModel(TeamEntity entity) {
     Team team = (Team) Util.toModel(entity);
+    team.getUser().setPassword("Ciphered...");
     team.setPlayers(team.getPlayers().stream().map(player -> {
-      player.add(linkTo(methodOn(PlayerController.class).getPlayer(player.getId().toString())).withSelfRel());
       player.setTeam(null);
+      player.add(linkTo(methodOn(PlayerController.class).getPlayer(player.getId().toString())).withSelfRel());
       return player;
     }).collect(Collectors.toList()));
+
     return team;
   }
 

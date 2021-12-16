@@ -12,6 +12,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.toptal.dreamteamapi.TestConstants;
+import com.toptal.dreamteamapi.configuration.AppConfig;
 import com.toptal.dreamteamapi.entity.UserEntity;
 import com.toptal.dreamteamapi.exception.InvalidRefreshTokenException;
 import com.toptal.dreamteamapi.hateoas.UserRepresentationModelAssembler;
@@ -28,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +38,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(SpringExtension.class)
+@Import(AppConfig.class)
 @WebMvcTest(AuthController.class)
 class AuthControllerTest {
 
@@ -182,21 +186,8 @@ class AuthControllerTest {
   public void signUp() throws Exception {
 
     UUID userUUID = UUID.randomUUID();
-    User user = new User();
-    user.setId(userUUID);
-    user.setUsername("scott1");
-    user.setPassword("tiger");
-    user.setFirstName("Bruce");
-    user.setLastName("Scott");
-    user.setEmail("bruce1@scott.db");
-
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(user.getId());
-    userEntity.setUsername(user.getUsername());
-    userEntity.setPassword(user.getPassword());
-    userEntity.setFirstName(user.getFirstName());
-    userEntity.setLastName(user.getLastName());
-    userEntity.setEmail(user.getEmail());
+    User user = TestConstants.getTestUser(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    UserEntity userEntity = TestConstants.getTestUserEntity(user);
 
     when(userService.signUp(any(User.class))).thenReturn(userEntity);
 

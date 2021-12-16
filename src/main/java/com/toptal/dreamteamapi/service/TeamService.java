@@ -82,7 +82,7 @@ public class TeamService {
   }
 
   @Transactional
-  public void updateTeam(Team team) {
+  public TeamEntity updateTeam(Team team) {
     TeamEntity teamEntity = teamRepository.findById(team.getId())
         .orElseThrow(() -> new NoSuchTeamException(String.format("Team with id %s doesn't not exits", team.getId())));
 
@@ -91,6 +91,8 @@ public class TeamService {
     teamEntity.setCountry(team.getCountry());
 
     teamRepository.save(teamEntity);
+
+    return teamEntity;
   }
 
   @Transactional

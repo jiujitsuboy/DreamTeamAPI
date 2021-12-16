@@ -6,6 +6,8 @@ import static com.toptal.dreamteamapi.Constants.H2_URL_PREFIX;
 import static com.toptal.dreamteamapi.Constants.REFRESH_URL;
 import static com.toptal.dreamteamapi.Constants.ROLE_CLAIM;
 import static com.toptal.dreamteamapi.Constants.SIGNUP_URL;
+import static com.toptal.dreamteamapi.Constants.SWAGGER_2_DOCS_URL;
+import static com.toptal.dreamteamapi.Constants.SWAGGER_2_UI_URL;
 import static com.toptal.dreamteamapi.Constants.TOKEN_URL;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -86,6 +88,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .cors()
         .and()
         .authorizeRequests()
+         .antMatchers("/v2/api-docs",
+             "/configuration/ui",
+             "/swagger-resources/**",
+             "/configuration/security",
+             "/swagger-ui.html",
+             "/webjars/**").permitAll()
+        .antMatchers(HttpMethod.GET, SWAGGER_2_DOCS_URL).permitAll()
+        .antMatchers(HttpMethod.GET, SWAGGER_2_UI_URL).permitAll()
+        .antMatchers(HttpMethod.POST, SWAGGER_2_UI_URL).permitAll()
+        .antMatchers(HttpMethod.PATCH, SWAGGER_2_UI_URL).permitAll()
+        .antMatchers(HttpMethod.DELETE, SWAGGER_2_UI_URL).permitAll()
         .antMatchers(HttpMethod.POST, TOKEN_URL).permitAll()
         .antMatchers(HttpMethod.DELETE, TOKEN_URL).permitAll()
         .antMatchers(HttpMethod.POST, SIGNUP_URL).permitAll()
@@ -179,7 +192,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   public JwtDecoder jwtDecoder(RSAPublicKey rsaPublicKey) {
+
     return NimbusJwtDecoder.withPublicKey(rsaPublicKey).build();
+
   }
 
 }

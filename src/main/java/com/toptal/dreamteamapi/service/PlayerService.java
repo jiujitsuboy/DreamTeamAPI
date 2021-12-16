@@ -46,8 +46,8 @@ public class PlayerService {
   }
 
   @Transactional
-  public PlayerEntity updatePlayer(String playerId, Player player) {
-    PlayerEntity playerEntity = getPlayerById(UUID.fromString(playerId));
+  public PlayerEntity updatePlayer(Player player) {
+    PlayerEntity playerEntity = getPlayerById(player.getId());
 
     playerEntity.setFirstname(player.getFirstname());
     playerEntity.setLastname(player.getLastname());

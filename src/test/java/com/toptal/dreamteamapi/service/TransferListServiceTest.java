@@ -7,14 +7,15 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
+import com.toptal.dreamteamapi.TestConstants;
 import com.toptal.dreamteamapi.entity.PlayerEntity;
 import com.toptal.dreamteamapi.entity.TeamEntity;
 import com.toptal.dreamteamapi.entity.TransferListEntity;
 import com.toptal.dreamteamapi.entity.UserEntity;
 import com.toptal.dreamteamapi.exception.NoSuchPlayerException;
 import com.toptal.dreamteamapi.model.Player;
-import com.toptal.dreamteamapi.model.PlayerType;
 import com.toptal.dreamteamapi.model.Team;
+import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.repository.TransferListRepository;
 import java.util.List;
 import java.util.Optional;
@@ -40,30 +41,13 @@ class TransferListServiceTest {
   @Test
   public void putOnSalePlayer() {
 
+    UUID userUUID = UUID.randomUUID();
+    UUID teamUUID = UUID.randomUUID();
     UUID playerUUID = UUID.randomUUID();
 
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
-
-    TeamEntity teamEntity = new TeamEntity();
-    teamEntity.setId(UUID.randomUUID());
-    teamEntity.setName("TeamB");
-    teamEntity.setValue(20_000_000L);
-    teamEntity.setCountry("Colombia");
-    teamEntity.setBudget(5_000_000L);
-    teamEntity.setUser(userEntity);
-
-    PlayerEntity expectedPlayerEntity = new PlayerEntity();
-    expectedPlayerEntity.setId(playerUUID);
-    expectedPlayerEntity.setFirstname("PlayerFirstname");
-    expectedPlayerEntity.setType(PlayerType.DEFENDER);
-    expectedPlayerEntity.setValue(1_000_000L);
-    expectedPlayerEntity.setTeam(teamEntity);
+    UserEntity userEntity = TestConstants.getTestUserEntity(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    TeamEntity teamEntity = TestConstants.getTestTeamEntity(teamUUID,TestConstants.OLD_TEAM_NAME,TestConstants.OLD_TEAM_VALUE,TestConstants.OLD_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS_ENTITIES,TestConstants.OLD_TEAM_BUDGET, userEntity);
+    PlayerEntity expectedPlayerEntity = TestConstants.getTestPlayerEntity(playerUUID,TestConstants.PLAYER_COUNTRY,TestConstants.PLAYER_FIRST_NAME, TestConstants.PLAYER_LAST_NAME, TestConstants.PLAYER_VALUE, TestConstants.PLAYER_AGE, teamEntity);
 
     when(playerService.getPlayerById(any(UUID.class))).thenReturn(expectedPlayerEntity);
 
@@ -80,53 +64,16 @@ class TransferListServiceTest {
   public void buyPlayer() {
 
     UUID transferListUUID = UUID.randomUUID();
-    UUID playerUUID = UUID.randomUUID();
-    UUID oldTeamUUID = UUID.randomUUID();
     UUID newTeamUUID = UUID.randomUUID();
-    Long playerValue = 2_000_000L;
-    Long oldTeamBudget = 5_000_000L;
-    Long newTeamBudget = 1_000_000L;
-    Long oldTeamValue = 20_000_000L;
-    Long newTeamValue = 20_000_000L;
+    UUID playerUUID = UUID.randomUUID();
 
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
+    User newUser = TestConstants.getTestUser(newTeamUUID,TestConstants.USER_NAME_B, TestConstants.USER_PASSWORD_B, TestConstants.USER_FIRST_NAME_B, TestConstants.USER_LAST_NAME_B, TestConstants.USER_EMAIL_B);
+    Team newTeam = TestConstants.getTestTeam(newTeamUUID,TestConstants.NEW_TEAM_NAME,TestConstants.NEW_TEAM_VALUE,TestConstants.NEW_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS,TestConstants.NEW_TEAM_BUDGET, newUser);
+    Player expectedPlayer = TestConstants.getTestPlayer(playerUUID,TestConstants.PLAYER_COUNTRY,TestConstants.PLAYER_FIRST_NAME, TestConstants.PLAYER_LAST_NAME, TestConstants.PLAYER_VALUE, TestConstants.PLAYER_AGE, newTeam);
 
-    TeamEntity newTeamEntity = new TeamEntity();
-    newTeamEntity.setId(newTeamUUID);
-    newTeamEntity.setName("TeamB");
-    newTeamEntity.setValue(newTeamValue);
-    newTeamEntity.setCountry("Colombia");
-    newTeamEntity.setBudget(newTeamBudget);
-    newTeamEntity.setUser(userEntity);
-
-    TeamEntity oldTeamEntity = new TeamEntity();
-    oldTeamEntity.setId(oldTeamUUID);
-    oldTeamEntity.setBudget(oldTeamBudget);
-    oldTeamEntity.setValue(oldTeamValue);
-
-    PlayerEntity expectedPlayerEntity = new PlayerEntity();
-    expectedPlayerEntity.setId(playerUUID);
-    expectedPlayerEntity.setFirstname("PlayerFirstname");
-    expectedPlayerEntity.setType(PlayerType.DEFENDER);
-    expectedPlayerEntity.setValue(playerValue);
-    expectedPlayerEntity.setTeam(newTeamEntity);
-
-    Team team = new Team();
-    team.setId(newTeamUUID);
-    team.setName(newTeamEntity.getName());
-
-    Player expectedPlayer = new Player();
-    expectedPlayer.setId(playerUUID);
-    expectedPlayer.setFirstname("PlayerFirstname");
-    expectedPlayer.setType(PlayerType.DEFENDER);
-    expectedPlayer.setValue(playerValue);
-    expectedPlayer.setTeam(team);
+    UserEntity oldUserEntity = TestConstants.getTestUserEntity(newUser);
+    TeamEntity oldTeamEntity = TestConstants.getTestTeamEntity(newTeam, oldUserEntity);
+    PlayerEntity expectedPlayerEntity = TestConstants.getTestPlayerEntity(expectedPlayer, oldTeamEntity);
 
     TransferListEntity transferListEntity = new TransferListEntity();
     transferListEntity.setId(transferListUUID);
@@ -162,34 +109,12 @@ class TransferListServiceTest {
   public void getTransferList() {
 
     UUID transferListUUID = UUID.randomUUID();
-    UUID playerUUID = UUID.randomUUID();
     UUID newTeamUUID = UUID.randomUUID();
-    Long playerValue = 2_000_000L;
-    Long teamBudget = 1_000_000L;
-    Long teamValue = 20_000_000L;
+    UUID playerUUID = UUID.randomUUID();
 
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
-
-    TeamEntity teamEntity = new TeamEntity();
-    teamEntity.setId(newTeamUUID);
-    teamEntity.setName("TeamB");
-    teamEntity.setValue(teamValue);
-    teamEntity.setCountry("Colombia");
-    teamEntity.setBudget(teamBudget);
-    teamEntity.setUser(userEntity);
-
-    PlayerEntity expectedPlayerEntity = new PlayerEntity();
-    expectedPlayerEntity.setId(playerUUID);
-    expectedPlayerEntity.setFirstname("PlayerFirstname");
-    expectedPlayerEntity.setType(PlayerType.DEFENDER);
-    expectedPlayerEntity.setValue(playerValue);
-    expectedPlayerEntity.setTeam(teamEntity);
+    UserEntity newUserEntity = TestConstants.getTestUserEntity(newTeamUUID,TestConstants.USER_NAME_B, TestConstants.USER_PASSWORD_B, TestConstants.USER_FIRST_NAME_B, TestConstants.USER_LAST_NAME_B, TestConstants.USER_EMAIL_B);
+    TeamEntity newTeamEntity = TestConstants.getTestTeamEntity(newTeamUUID,TestConstants.NEW_TEAM_NAME,TestConstants.NEW_TEAM_VALUE,TestConstants.NEW_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS_ENTITIES,TestConstants.NEW_TEAM_BUDGET, newUserEntity);
+    PlayerEntity expectedPlayerEntity = TestConstants.getTestPlayerEntity(playerUUID,TestConstants.PLAYER_COUNTRY,TestConstants.PLAYER_FIRST_NAME, TestConstants.PLAYER_LAST_NAME, TestConstants.PLAYER_VALUE, TestConstants.PLAYER_AGE, newTeamEntity);
 
     TransferListEntity transferListEntity = new TransferListEntity();
     transferListEntity.setId(transferListUUID);

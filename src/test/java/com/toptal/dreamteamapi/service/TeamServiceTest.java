@@ -2,6 +2,7 @@ package com.toptal.dreamteamapi.service;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -11,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
+import com.toptal.dreamteamapi.TestConstants;
 import com.toptal.dreamteamapi.entity.PlayerEntity;
 import com.toptal.dreamteamapi.entity.TeamEntity;
 import com.toptal.dreamteamapi.entity.UserEntity;
@@ -22,8 +24,6 @@ import com.toptal.dreamteamapi.model.PlayerType;
 import com.toptal.dreamteamapi.model.Team;
 import com.toptal.dreamteamapi.repository.PlayerRepository;
 import com.toptal.dreamteamapi.repository.TeamRepository;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,26 +47,21 @@ class TeamServiceTest {
 
   @Test
   public void createTeamForUser() {
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
+
+    UUID userUUID = UUID.randomUUID();
+    UserEntity userEntity = TestConstants.getTestUserEntity(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
 
     when(playerService.createPlayer(any(PlayerType.class), any(TeamEntity.class))).thenReturn(new PlayerEntity());
 
     classUnderTest.createTeamForUser(userEntity);
+
     verify(teamRepository, times(2)).save(any(TeamEntity.class));
   }
 
   @Test
   public void getUserTeam() {
 
-    TeamEntity expectedTeamEntity = new TeamEntity();
-
-    when(teamRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(expectedTeamEntity));
+    when(teamRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(new TeamEntity()));
 
     assertNotNull(classUnderTest.getUserTeam(UUID.randomUUID().toString()));
   }
@@ -91,24 +86,37 @@ class TeamServiceTest {
 
   @Test
   public void updateTeam() {
+
+    UUID teamUUID = UUID.randomUUID();
+
     TeamEntity currentTeamEntity = new TeamEntity();
+    currentTeamEntity.setId(teamUUID);
     currentTeamEntity.setName("TeamA");
+    currentTeamEntity.setCountry("Colombia");
+
     Team updateTeamEntity = new Team();
-    updateTeamEntity.setId(UUID.randomUUID());
+    updateTeamEntity.setId(teamUUID);
     updateTeamEntity.setName("TeamB");
     updateTeamEntity.setCountry("China");
 
     when(teamRepository.findById(any(UUID.class))).thenReturn(Optional.of(currentTeamEntity));
-    classUnderTest.updateTeam(updateTeamEntity);
+
+    TeamEntity returnedTeamEntity = classUnderTest.updateTeam(updateTeamEntity);
+
     verify(teamRepository, times(1)).save(any(TeamEntity.class));
+    assertNotNull(returnedTeamEntity);
+    assertEquals(returnedTeamEntity.getName(), updateTeamEntity.getName());
+    assertEquals(returnedTeamEntity.getCountry(), updateTeamEntity.getCountry());
+
   }
 
   @Test
   public void updateTeamNoSuchTeamException() {
-    TeamEntity currentTeamEntity = new TeamEntity();
-    currentTeamEntity.setName("TeamA");
+
+    UUID teamUUID = UUID.randomUUID();
+
     Team updateTeamEntity = new Team();
-    updateTeamEntity.setId(UUID.randomUUID());
+    updateTeamEntity.setId(teamUUID);
     updateTeamEntity.setName("TeamB");
     updateTeamEntity.setCountry("China");
 
@@ -118,43 +126,25 @@ class TeamServiceTest {
 
   @Test
   public void buyPlayer() {
+
     UUID playerUUID = UUID.randomUUID();
+    UUID oldUserTeamUUID = UUID.randomUUID();
+    UUID newUserTeamUUID = UUID.randomUUID();
     UUID oldTeamUUID = UUID.randomUUID();
     UUID newTeamUUID = UUID.randomUUID();
+
+    Long newBudgetTeam = 10_000_000L;
     Long playerValue = 2_000_000L;
-    Long oldTeamBudget = 5_000_000L;
-    Long newTeamBudget = 10_000_000L;
-    Long oldTeamValue = 20_000_000L;
-    Long newTeamValue = 20_000_000L;
 
-    TeamEntity oldTeamEntity = new TeamEntity();
-    oldTeamEntity.setId(oldTeamUUID);
-    oldTeamEntity.setBudget(oldTeamBudget);
-    oldTeamEntity.setValue(oldTeamValue);
+    UserEntity oldTeamUserEntity = TestConstants.getTestUserEntity(oldUserTeamUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    TeamEntity oldTeamEntity = TestConstants.getTestTeamEntity(oldTeamUUID,TestConstants.OLD_TEAM_NAME,TestConstants.OLD_TEAM_VALUE,TestConstants.OLD_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS_ENTITIES,TestConstants.OLD_TEAM_BUDGET, oldTeamUserEntity);
 
-    TeamEntity newTeamEntity = new TeamEntity();
-    newTeamEntity.setId(newTeamUUID);
-    newTeamEntity.setName("TeamB");
-    newTeamEntity.setValue(newTeamValue);
-    newTeamEntity.setCountry("Colombia");
-    newTeamEntity.setBudget(newTeamBudget);
+    UserEntity newTeamUserEntity = TestConstants.getTestUserEntity(newUserTeamUUID,TestConstants.USER_NAME_B, TestConstants.USER_PASSWORD_B, TestConstants.USER_FIRST_NAME_B, TestConstants.USER_LAST_NAME_B, TestConstants.USER_EMAIL_B);
+    TeamEntity newTeamEntity = TestConstants.getTestTeamEntity(newTeamUUID,TestConstants.NEW_TEAM_NAME,TestConstants.NEW_TEAM_VALUE,TestConstants.NEW_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS_ENTITIES,newBudgetTeam, newTeamUserEntity);
 
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
+    PlayerEntity playerEntity = TestConstants.getTestPlayerEntity(playerUUID,TestConstants.PLAYER_COUNTRY,TestConstants.PLAYER_FIRST_NAME, TestConstants.PLAYER_LAST_NAME, playerValue, TestConstants.PLAYER_AGE, oldTeamEntity);
 
-    PlayerEntity playerEntity = new PlayerEntity();
-    playerEntity.setId(playerUUID);
-    playerEntity.setValue(playerValue);
-    playerEntity.setTeam(oldTeamEntity);
-
-    oldTeamEntity.setPlayers(Arrays.asList(playerEntity));
-    newTeamEntity.setPlayers(new ArrayList<>());
-    newTeamEntity.setUser(userEntity);
+    oldTeamEntity.getPlayers().add(playerEntity);
 
     when(playerService.getPlayerById(playerUUID)).thenReturn(playerEntity);
     when(teamRepository.findById(oldTeamUUID)).thenReturn(Optional.of(oldTeamEntity));
@@ -167,50 +157,25 @@ class TeamServiceTest {
 
     assertNotNull(returnedPlayer);
     assertThat("Player assigned to buyer team", newTeamUUID, is(returnedPlayer.getTeam().getId()));
-    assertThat("newTeam reduce budget by player's value", newTeamEntity.getBudget(), is(newTeamBudget - playerValue));
-    assertThat("oldTeam increase budget by player's value", oldTeamEntity.getBudget(), is(oldTeamBudget + playerValue));
+    assertThat("newTeam reduce budget by player's value", newTeamEntity.getBudget(), is(newBudgetTeam - playerValue));
+    assertThat("oldTeam increase budget by player's value", oldTeamEntity.getBudget(), is(TestConstants.OLD_TEAM_BUDGET + playerValue));
     assertThat("Player value changed after the sell", playerEntity.getValue(), not(equalTo(playerValue)));
   }
 
   @Test
   public void buyPlayerNoSuchTeamException() {
+
     UUID playerUUID = UUID.randomUUID();
+    UUID oldUserTeamUUID = UUID.randomUUID();
     UUID oldTeamUUID = UUID.randomUUID();
     UUID newTeamUUID = UUID.randomUUID();
     Long playerValue = 2_000_000L;
-    Long oldTeamBudget = 5_000_000L;
-    Long newTeamBudget = 10_000_000L;
-    Long oldTeamValue = 20_000_000L;
-    Long newTeamValue = 20_000_000L;
 
-    TeamEntity oldTeamEntity = new TeamEntity();
-    oldTeamEntity.setId(oldTeamUUID);
-    oldTeamEntity.setBudget(oldTeamBudget);
-    oldTeamEntity.setValue(oldTeamValue);
+    UserEntity oldTeamUserEntity = TestConstants.getTestUserEntity(oldUserTeamUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    TeamEntity oldTeamEntity = TestConstants.getTestTeamEntity(oldTeamUUID,TestConstants.OLD_TEAM_NAME,TestConstants.OLD_TEAM_VALUE,TestConstants.OLD_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS_ENTITIES,TestConstants.OLD_TEAM_BUDGET, oldTeamUserEntity);
+    PlayerEntity playerEntity = TestConstants.getTestPlayerEntity(playerUUID,TestConstants.PLAYER_COUNTRY,TestConstants.PLAYER_FIRST_NAME, TestConstants.PLAYER_LAST_NAME, playerValue, TestConstants.PLAYER_AGE, oldTeamEntity);
 
-    TeamEntity newTeamEntity = new TeamEntity();
-    newTeamEntity.setId(newTeamUUID);
-    newTeamEntity.setName("TeamB");
-    newTeamEntity.setValue(newTeamValue);
-    newTeamEntity.setCountry("Colombia");
-    newTeamEntity.setBudget(newTeamBudget);
-
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
-
-    PlayerEntity playerEntity = new PlayerEntity();
-    playerEntity.setId(playerUUID);
-    playerEntity.setValue(playerValue);
-    playerEntity.setTeam(oldTeamEntity);
-
-    oldTeamEntity.setPlayers(Arrays.asList(playerEntity));
-    newTeamEntity.setPlayers(new ArrayList<>());
-    newTeamEntity.setUser(userEntity);
+    oldTeamEntity.getPlayers().add(playerEntity);
 
     when(playerService.getPlayerById(playerUUID)).thenReturn(playerEntity);
     when(teamRepository.findById(oldTeamUUID)).thenReturn(Optional.of(oldTeamEntity));
@@ -222,43 +187,27 @@ class TeamServiceTest {
 
   @Test
   public void buyPlayerInsufficientTeamBudgedException() {
+
     UUID playerUUID = UUID.randomUUID();
+    UUID oldUserTeamUUID = UUID.randomUUID();
     UUID oldTeamUUID = UUID.randomUUID();
     UUID newTeamUUID = UUID.randomUUID();
+    String newTeamName = "TeamB";
+    String newTeamCountry = "Colombia";
+    String newUserTeamUserName = "bruce2";
     Long playerValue = 2_000_000L;
-    Long oldTeamBudget = 5_000_000L;
     Long newTeamBudget = 1_000_000L;
-    Long oldTeamValue = 20_000_000L;
     Long newTeamValue = 20_000_000L;
 
-    TeamEntity oldTeamEntity = new TeamEntity();
-    oldTeamEntity.setId(oldTeamUUID);
-    oldTeamEntity.setBudget(oldTeamBudget);
-    oldTeamEntity.setValue(oldTeamValue);
+    UserEntity oldTeamUserEntity = TestConstants.getTestUserEntity(oldUserTeamUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    TeamEntity oldTeamEntity = TestConstants.getTestTeamEntity(oldTeamUUID,TestConstants.OLD_TEAM_NAME,TestConstants.OLD_TEAM_VALUE,TestConstants.OLD_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS_ENTITIES,TestConstants.OLD_TEAM_BUDGET, oldTeamUserEntity);
 
-    TeamEntity newTeamEntity = new TeamEntity();
-    newTeamEntity.setId(newTeamUUID);
-    newTeamEntity.setName("TeamB");
-    newTeamEntity.setValue(newTeamValue);
-    newTeamEntity.setCountry("Colombia");
-    newTeamEntity.setBudget(newTeamBudget);
+    UserEntity newTeamUserEntity = TestConstants.getTestUserEntity(oldUserTeamUUID,newUserTeamUserName, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    TeamEntity newTeamEntity = TestConstants.getTestTeamEntity(newTeamUUID,newTeamName,newTeamValue,newTeamCountry,TestConstants.TEAM_PLAYERS_ENTITIES,newTeamBudget, newTeamUserEntity);
 
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
+    PlayerEntity playerEntity = TestConstants.getTestPlayerEntity(playerUUID,TestConstants.PLAYER_COUNTRY,TestConstants.PLAYER_FIRST_NAME, TestConstants.PLAYER_LAST_NAME, playerValue, TestConstants.PLAYER_AGE, oldTeamEntity);
 
-    PlayerEntity playerEntity = new PlayerEntity();
-    playerEntity.setId(playerUUID);
-    playerEntity.setValue(playerValue);
-    playerEntity.setTeam(oldTeamEntity);
-
-    oldTeamEntity.setPlayers(Arrays.asList(playerEntity));
-    newTeamEntity.setPlayers(new ArrayList<>());
-    newTeamEntity.setUser(userEntity);
+    oldTeamEntity.getPlayers().add(playerEntity);
 
     when(playerService.getPlayerById(playerUUID)).thenReturn(playerEntity);
     when(teamRepository.findById(oldTeamUUID)).thenReturn(Optional.of(oldTeamEntity));

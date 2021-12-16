@@ -4,12 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
+import com.toptal.dreamteamapi.TestConstants;
 import com.toptal.dreamteamapi.entity.PlayerEntity;
 import com.toptal.dreamteamapi.entity.TeamEntity;
 import com.toptal.dreamteamapi.entity.UserEntity;
 import com.toptal.dreamteamapi.exception.NoSuchPlayerException;
 import com.toptal.dreamteamapi.model.Player;
 import com.toptal.dreamteamapi.model.PlayerType;
+import com.toptal.dreamteamapi.model.Team;
+import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.repository.PlayerRepository;
 import java.util.List;
 import java.util.Optional;
@@ -32,21 +35,11 @@ class PlayerServiceTest {
   @Test
   public void createPlayer(){
 
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
+    UUID userUUID = UUID.randomUUID();
+    UUID teamUUID = UUID.randomUUID();
 
-    TeamEntity teamEntity = new TeamEntity();
-    teamEntity.setId(UUID.randomUUID());
-    teamEntity.setName("TeamB");
-    teamEntity.setValue(20_000_000L);
-    teamEntity.setCountry("Colombia");
-    teamEntity.setBudget(5_000_000L);
-    teamEntity.setUser(userEntity);
+    UserEntity userEntity = TestConstants.getTestUserEntity(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    TeamEntity teamEntity = TestConstants.getTestTeamEntity(teamUUID,TestConstants.OLD_TEAM_NAME,TestConstants.OLD_TEAM_VALUE,TestConstants.OLD_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS_ENTITIES,TestConstants.OLD_TEAM_BUDGET, userEntity);
 
     PlayerEntity playerEntity = classUnderTest.createPlayer(PlayerType.ATTACKER, teamEntity);
     assertNotNull(playerEntity);
@@ -55,30 +48,27 @@ class PlayerServiceTest {
 
   @Test
   public void updatePlayer(){
+
+    UUID userUUID = UUID.randomUUID();
+    UUID teamUUID = UUID.randomUUID();
     UUID playerUUID = UUID.randomUUID();
-    String previousFirstname = "playerFirstName";
-    String previousLastname = "playerLastName";
-    String previousCountry = "Colombia";
-    String expectedFirstname = "Lionel";
-    String expectedLastname = "Messi";
-    String expectedCountry = "Argentina";
 
+    String expectedFirstname = "Yerri";
+    String expectedLastname = "Mina";
+    String expectedCountry = "Colombia";
 
-    PlayerEntity previousPlayerEntity = new PlayerEntity();
-    previousPlayerEntity.setId(playerUUID);
-    previousPlayerEntity.setFirstname(previousFirstname);
-    previousPlayerEntity.setLastname(previousLastname);
-    previousPlayerEntity.setCountry(previousCountry);
+    User user = TestConstants.getTestUser(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    Team team = TestConstants.getTestTeam(teamUUID,TestConstants.OLD_TEAM_NAME,TestConstants.OLD_TEAM_VALUE,TestConstants.OLD_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS,TestConstants.OLD_TEAM_BUDGET, user);
+    Player previousPlayer = TestConstants.getTestPlayer(playerUUID,TestConstants.PLAYER_COUNTRY,TestConstants.PLAYER_FIRST_NAME, TestConstants.PLAYER_LAST_NAME, TestConstants.PLAYER_VALUE, TestConstants.PLAYER_AGE, team);
+    Player updatedPlayer = TestConstants.getTestPlayer(playerUUID,expectedCountry,expectedFirstname, expectedLastname, TestConstants.PLAYER_VALUE, TestConstants.PLAYER_AGE, team);
 
-    Player updatedPlayer = new Player();
-    updatedPlayer.setId(playerUUID);
-    updatedPlayer.setFirstname(expectedFirstname);
-    updatedPlayer.setLastname(expectedLastname);
-    updatedPlayer.setCountry(expectedCountry);
+    UserEntity userEntity = TestConstants.getTestUserEntity(user);
+    TeamEntity teamEntity = TestConstants.getTestTeamEntity(team,userEntity);
+    PlayerEntity previousPlayerEntity = TestConstants.getTestPlayerEntity(previousPlayer,teamEntity);
 
     when(playerRepository.findById(any(UUID.class))).thenReturn(Optional.of(previousPlayerEntity));
 
-    PlayerEntity returnedPlayerEntity = classUnderTest.updatePlayer(playerUUID.toString(),updatedPlayer);
+    PlayerEntity returnedPlayerEntity = classUnderTest.updatePlayer(updatedPlayer);
 
     assertNotNull(returnedPlayerEntity);
     assertEquals(returnedPlayerEntity.getFirstname(),updatedPlayer.getFirstname());
@@ -95,31 +85,16 @@ class PlayerServiceTest {
   @Test
   public void getAllPlayers(){
 
-    UserEntity userEntity = new UserEntity();
-    userEntity.setId(UUID.randomUUID());
-    userEntity.setUsername("scott1");
-    userEntity.setPassword("tiger");
-    userEntity.setFirstName("Bruce");
-    userEntity.setLastName("Scott");
-    userEntity.setEmail("bruce1@scott.db");
+    UUID userUUID = UUID.randomUUID();
+    UUID teamUUID = UUID.randomUUID();
+    UUID playerUUID = UUID.randomUUID();
 
-    TeamEntity teamEntity = new TeamEntity();
-    teamEntity.setId(UUID.randomUUID());
-    teamEntity.setName("TeamB");
-    teamEntity.setValue(20_000_000L);
-    teamEntity.setCountry("Colombia");
-    teamEntity.setBudget(5_000_000L);
-    teamEntity.setUser(userEntity);
-
-    PlayerEntity playerEntity = new PlayerEntity();
-    playerEntity.setId(UUID.randomUUID());
-    playerEntity.setValue(1_000_000);
-    playerEntity.setTeam(teamEntity);
+    UserEntity userEntity = TestConstants.getTestUserEntity(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    TeamEntity teamEntity = TestConstants.getTestTeamEntity(teamUUID,TestConstants.OLD_TEAM_NAME,TestConstants.OLD_TEAM_VALUE,TestConstants.OLD_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS_ENTITIES,TestConstants.OLD_TEAM_BUDGET, userEntity);
+    PlayerEntity playerEntity = TestConstants.getTestPlayerEntity(playerUUID,TestConstants.PLAYER_COUNTRY,TestConstants.PLAYER_FIRST_NAME, TestConstants.PLAYER_LAST_NAME, TestConstants.PLAYER_VALUE, TestConstants.PLAYER_AGE, teamEntity);
 
     Iterable<PlayerEntity> expectedPlayerEntities = List.of(playerEntity, playerEntity);
     when(playerRepository.findAll()).thenReturn(expectedPlayerEntities);
     assertNotNull(classUnderTest.getAllPlayers());
   }
-
-
 }

@@ -4,18 +4,19 @@ import static org.springframework.http.ResponseEntity.accepted;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
-import com.toptal.dreamteamapi.exception.InvalidRefreshTokenException;
 import com.toptal.dreamteamapi.hateoas.UserRepresentationModelAssembler;
 import com.toptal.dreamteamapi.model.RefreshToken;
 import com.toptal.dreamteamapi.model.SignInReq;
 import com.toptal.dreamteamapi.model.SignedInUser;
 import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Api(value = "Authorization Controller")
 public class AuthController {
 
   private final UserService service;
@@ -34,54 +36,40 @@ public class AuthController {
     this.userAssembler = userAssembler;
   }
 
-  @PostMapping(
-      value = "/token/refresh",
-      produces = {"application/json"},
-      consumes = {"application/json"}
-  )
+  @ApiOperation(value = "Refresh Tokens", nickname = "getAccessToken", notes = "Generate a new Refresh and Access Tokens-")
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Refresh current tokens and generate a new pair."),
+      @ApiResponse(code = 400, message = "Invalid Refresh Token Exception.") })
+  @PostMapping(value = "/token/refresh")
   public ResponseEntity<SignedInUser> getAccessToken(@Valid @RequestBody(required = false) RefreshToken refreshToken) {
     return ok(service.getAccessToken(refreshToken).get());
   }
 
-  @PostMapping(
-      value = "/token",
-      produces = {"application/json"},
-      consumes = {"application/json"}
-  )
+  @ApiOperation(value = "SignIn user", nickname = "signIn", notes = "Sign In an User and generate the access and refresh token-")
+  @ApiResponses(value = {
+      @ApiResponse(code = 202, message = "SignIn user and generate tokens."),
+      @ApiResponse(code = 404, message = "Username Not Found Exception."),
+      @ApiResponse(code = 401, message = "Insufficient Authentication Exception.")})
+  @PostMapping(value = "/token")
   public ResponseEntity<?> signIn(@Valid @RequestBody(required = false) SignInReq signInReq) {
-    try{
-      return  status(HttpStatus.ACCEPTED).body(userAssembler.toModel(service.signUser(signInReq.getUserName(), signInReq.getPassword())));
-    }
-    catch(UsernameNotFoundException ex){
-      return status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
-    catch(InsufficientAuthenticationException ex){
-      return status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
-    }
+      return status(HttpStatus.ACCEPTED).body(userAssembler.toModel(service.signUser(signInReq.getUserName(), signInReq.getPassword())));
   }
 
-  @DeleteMapping(
-      value = "/token",
-      consumes = {"application/json"}
-  )
+  @ApiOperation(value = "SignOut user", nickname = "signOut", notes = "Sign out an User and destroy the refresh token-")
+  @ApiResponses(value = {
+      @ApiResponse(code = 202, message = "SignOut user and destroy refresh token."),
+      @ApiResponse(code = 400, message = "Invalid Refresh Token Exception.")})
+  @DeleteMapping(value = "/token")
   public ResponseEntity<Void> signOut(@Valid @RequestBody(required = false) RefreshToken refreshToken) {
-    // We are using removeToken API for signout.
-    // Ideally you would like to get tgit she user ID from Logged in user's request
-    // and remove the refresh token based on retrieved user id from request.
-    try {
       service.removeRefreshToken(refreshToken);
       return accepted().build();
-    }
-    catch(InvalidRefreshTokenException ex){
-      return status(HttpStatus.BAD_REQUEST).build();
-    }
   }
 
-  @PostMapping(
-      value = "/users",
-      produces = {"application/json"},
-      consumes = {"application/json"}
-  )
+  @ApiOperation(value = "SignUp user", nickname = "signUp", notes = "Sign up an new User and create his random team")
+  @ApiResponses(value = {
+      @ApiResponse(code = 201, message = "SignUp user and create his team."),
+      @ApiResponse(code = 409, message = "Generic Already Exists Exception.")})
+  @PostMapping(value = "/users")
   public ResponseEntity<User> signUp(@Valid @RequestBody(required = false) User user) {
     return status(HttpStatus.CREATED).body(userAssembler.toModel(service.signUp(user)));
   }

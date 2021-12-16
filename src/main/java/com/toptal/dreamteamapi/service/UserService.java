@@ -105,7 +105,6 @@ public class UserService {
     userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
     userRepository.save(userEntity);
     return userEntity;
-    //return createSignedUserWithRefreshToken(userEntity);
   }
 
   private SignedInUser createSignedUserWithRefreshToken(UserEntity userEntity) {
