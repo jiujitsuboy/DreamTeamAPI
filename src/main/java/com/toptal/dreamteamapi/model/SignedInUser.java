@@ -2,6 +2,7 @@ package com.toptal.dreamteamapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.util.UUID;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -14,5 +15,7 @@ public class SignedInUser extends RepresentationModel<SignedInUser> implements S
   private String accessToken;
   @JsonProperty("username")
   private String userName;
+  @JsonProperty("userId")
+  private UUID userId;
 
 }

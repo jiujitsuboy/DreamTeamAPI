@@ -19,6 +19,7 @@ import com.toptal.dreamteamapi.model.TransferList;
 import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.security.JwtManager;
 import com.toptal.dreamteamapi.service.TransferListService;
+import com.toptal.dreamteamapi.service.impl.TransferListServiceImpl;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;

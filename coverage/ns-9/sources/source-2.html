@@ -1,0 +1,112 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TransferListService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.toptal.dreamteamapi.service</a>
+</div>
+
+<h1>Coverage Summary for Class: TransferListService (com.toptal.dreamteamapi.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">TransferListService$MockitoMock$1803409526</td>
+  </tr>
+  <tr>
+    <td class="name">TransferListService$MockitoMock$1803409526$auxiliary$HJijfBPb</td>
+  </tr>
+  <tr>
+    <td class="name">TransferListService$MockitoMock$1803409526$auxiliary$Tqghgyqb</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.toptal.dreamteamapi.service;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.toptal.dreamteamapi.model.Player;
+<i class="no-highlight">4</i>&nbsp;import com.toptal.dreamteamapi.model.TransferList;
+<i class="no-highlight">5</i>&nbsp;import java.util.List;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;/**
+<i class="no-highlight">8</i>&nbsp; * Available operations for the Player&#39;s Transfer List
+<i class="no-highlight">9</i>&nbsp; */
+<i class="no-highlight">10</i>&nbsp;public interface TransferListService {
+<i class="no-highlight">11</i>&nbsp;
+<i class="no-highlight">12</i>&nbsp;  /**
+<i class="no-highlight">13</i>&nbsp;   * Mark a player on sale by moving to the transfer list
+<i class="no-highlight">14</i>&nbsp;   * @param playerId player&#39;s id
+<i class="no-highlight">15</i>&nbsp;   * @return @Link {Player}
+<i class="no-highlight">16</i>&nbsp;   */
+<i class="no-highlight">17</i>&nbsp;  Player putOnSalePlayer(String playerId);
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;  /**
+<i class="no-highlight">20</i>&nbsp;   * Buy a player available in the transfer list and make it part of the buying team.
+<i class="no-highlight">21</i>&nbsp;   * @param playerId player&#39;s id
+<i class="no-highlight">22</i>&nbsp;   * @param teamId destination team id of the purchase
+<i class="no-highlight">23</i>&nbsp;   * @return @Link {Player}
+<i class="no-highlight">24</i>&nbsp;   */
+<i class="no-highlight">25</i>&nbsp;  Player buyPlayer(String playerId, String teamId);
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;  /**
+<i class="no-highlight">28</i>&nbsp;   * Retrieve all the players and their values available in the transfer list
+<i class="no-highlight">29</i>&nbsp;   * @return @Link{List} of @Link{TransferList}
+<i class="no-highlight">30</i>&nbsp;   */
+<i class="no-highlight">31</i>&nbsp;  List&lt;TransferList&gt; getTransferList();
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-16 13:32</div>
+</div>
+</body>
+</html>

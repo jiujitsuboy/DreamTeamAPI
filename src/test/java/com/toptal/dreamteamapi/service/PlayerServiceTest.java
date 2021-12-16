@@ -14,6 +14,7 @@ import com.toptal.dreamteamapi.model.PlayerType;
 import com.toptal.dreamteamapi.model.Team;
 import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.repository.PlayerRepository;
+import com.toptal.dreamteamapi.service.impl.PlayerServiceImpl;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +31,7 @@ class PlayerServiceTest {
   private PlayerRepository playerRepository;
 
   @InjectMocks
-  private PlayerService classUnderTest;
+  private PlayerServiceImpl classUnderTest;
 
   @Test
   public void createPlayer(){

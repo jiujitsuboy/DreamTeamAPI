@@ -1,0 +1,214 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > PlayerServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.toptal.dreamteamapi.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: PlayerServiceImpl (com.toptal.dreamteamapi.service.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/28)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PlayerServiceImpl$$EnhancerBySpringCGLIB$$fc21f192</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerServiceImpl$MockitoMock$1378508956</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerServiceImpl$MockitoMock$1378508956$auxiliary$6jiEFlbh</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerServiceImpl$MockitoMock$1378508956$auxiliary$B44XnoAX</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerServiceImpl$MockitoMock$1378508956$auxiliary$haYhjQKR</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerServiceImpl$MockitoMock$1378508956$auxiliary$Jwnq1LPZ</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerServiceImpl$MockitoMock$1378508956$auxiliary$Nnkvqyy6</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerServiceImpl$MockitoMock$1378508956$auxiliary$O9ZRfBxu</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/28)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.toptal.dreamteamapi.service.impl;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.toptal.dreamteamapi.entity.PlayerEntity;
+<i class="no-highlight">4</i>&nbsp;import com.toptal.dreamteamapi.entity.TeamEntity;
+<i class="no-highlight">5</i>&nbsp;import com.toptal.dreamteamapi.exception.NoSuchPlayerException;
+<i class="no-highlight">6</i>&nbsp;import com.toptal.dreamteamapi.model.Player;
+<i class="no-highlight">7</i>&nbsp;import com.toptal.dreamteamapi.model.PlayerType;
+<i class="no-highlight">8</i>&nbsp;import com.toptal.dreamteamapi.model.Team;
+<i class="no-highlight">9</i>&nbsp;import com.toptal.dreamteamapi.repository.PlayerRepository;
+<i class="no-highlight">10</i>&nbsp;import com.toptal.dreamteamapi.service.PlayerService;
+<i class="no-highlight">11</i>&nbsp;import com.toptal.dreamteamapi.service.Util;
+<i class="no-highlight">12</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">13</i>&nbsp;import java.util.List;
+<i class="no-highlight">14</i>&nbsp;import java.util.UUID;
+<i class="no-highlight">15</i>&nbsp;import org.springframework.stereotype.Service;
+<i class="no-highlight">16</i>&nbsp;import org.springframework.transaction.annotation.Transactional;
+<i class="no-highlight">17</i>&nbsp;
+<i class="no-highlight">18</i>&nbsp;@Service
+<i class="no-highlight">19</i>&nbsp;public class PlayerServiceImpl implements PlayerService {
+<i class="no-highlight">20</i>&nbsp;
+<b class="fc"><i class="no-highlight">21</i>&nbsp;  private final long PLAYER_VALUE = 1_000_000;</b>
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;  private PlayerRepository playerRepository;
+<i class="no-highlight">24</i>&nbsp;
+<b class="fc"><i class="no-highlight">25</i>&nbsp;  public PlayerServiceImpl(PlayerRepository playerRepository) {</b>
+<b class="fc"><i class="no-highlight">26</i>&nbsp;    this.playerRepository = playerRepository;</b>
+<i class="no-highlight">27</i>&nbsp;  }
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;  @Override
+<i class="no-highlight">30</i>&nbsp;  @Transactional
+<i class="no-highlight">31</i>&nbsp;  public PlayerEntity createPlayer(PlayerType playerType, TeamEntity teamEntity) {
+<b class="fc"><i class="no-highlight">32</i>&nbsp;    String[] name = Util.NAMES.get((int) Math.round(Math.random() * (Util.NAMES.size() - 1))).split(&quot; &quot;);</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;    String country = Util.COUNTRIES.get((int) Math.round(Math.random() * (Util.COUNTRIES.size() - 1)));</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;    byte age = (byte) (18 + Math.random() * 22);</b>
+<i class="no-highlight">35</i>&nbsp;
+<b class="fc"><i class="no-highlight">36</i>&nbsp;    PlayerEntity playerEntity = new PlayerEntity();</b>
+<i class="no-highlight">37</i>&nbsp;
+<b class="fc"><i class="no-highlight">38</i>&nbsp;    playerEntity.setFirstname(name[0]);</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;    playerEntity.setLastname(name[1]);</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;    playerEntity.setCountry(country);</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;    playerEntity.setAge(age);</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;    playerEntity.setValue(PLAYER_VALUE);</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;    playerEntity.setTeam(teamEntity);</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;    playerEntity.setType(playerType);</b>
+<i class="no-highlight">45</i>&nbsp;
+<b class="fc"><i class="no-highlight">46</i>&nbsp;    playerRepository.save(playerEntity);</b>
+<i class="no-highlight">47</i>&nbsp;
+<b class="fc"><i class="no-highlight">48</i>&nbsp;    return playerEntity;</b>
+<i class="no-highlight">49</i>&nbsp;  }
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;  @Override
+<i class="no-highlight">52</i>&nbsp;  @Transactional
+<i class="no-highlight">53</i>&nbsp;  public PlayerEntity updatePlayer(Player player) {
+<b class="fc"><i class="no-highlight">54</i>&nbsp;    PlayerEntity playerEntity = getPlayerById(player.getId());</b>
+<i class="no-highlight">55</i>&nbsp;
+<b class="fc"><i class="no-highlight">56</i>&nbsp;    playerEntity.setFirstname(player.getFirstname());</b>
+<b class="fc"><i class="no-highlight">57</i>&nbsp;    playerEntity.setLastname(player.getLastname());</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;    playerEntity.setCountry(player.getCountry());</b>
+<i class="no-highlight">59</i>&nbsp;
+<b class="fc"><i class="no-highlight">60</i>&nbsp;    playerRepository.save(playerEntity);</b>
+<i class="no-highlight">61</i>&nbsp;
+<b class="fc"><i class="no-highlight">62</i>&nbsp;    return playerEntity;</b>
+<i class="no-highlight">63</i>&nbsp;  }
+<i class="no-highlight">64</i>&nbsp;
+<i class="no-highlight">65</i>&nbsp;  @Override
+<i class="no-highlight">66</i>&nbsp;  public PlayerEntity getPlayerById(UUID playerId) {
+<b class="fc"><i class="no-highlight">67</i>&nbsp;    return playerRepository.findById(playerId)</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;        .orElseThrow(() -&gt; new NoSuchPlayerException(String.format(&quot;Player with id %s doesn&#39;t exists&quot;, playerId)));</b>
+<i class="no-highlight">69</i>&nbsp;  }
+<i class="no-highlight">70</i>&nbsp;
+<i class="no-highlight">71</i>&nbsp;  @Override
+<i class="no-highlight">72</i>&nbsp;  public Iterable&lt;PlayerEntity&gt; getAllPlayers() {
+<b class="fc"><i class="no-highlight">73</i>&nbsp;    List&lt;Player&gt; players = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">74</i>&nbsp;    Iterable&lt;PlayerEntity&gt; playerEntities =  playerRepository.findAll();</b>
+<b class="fc"><i class="no-highlight">75</i>&nbsp;    playerEntities.forEach(player-&gt;players.add((Player) Util.toModel(player)));</b>
+<b class="fc"><i class="no-highlight">76</i>&nbsp;    return playerEntities;</b>
+<i class="no-highlight">77</i>&nbsp;  }
+<i class="no-highlight">78</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-16 13:32</div>
+</div>
+</body>
+</html>

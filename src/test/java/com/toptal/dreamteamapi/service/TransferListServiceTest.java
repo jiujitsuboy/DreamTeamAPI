@@ -17,6 +17,9 @@ import com.toptal.dreamteamapi.model.Player;
 import com.toptal.dreamteamapi.model.Team;
 import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.repository.TransferListRepository;
+import com.toptal.dreamteamapi.service.impl.PlayerServiceImpl;
+import com.toptal.dreamteamapi.service.impl.TeamServiceImpl;
+import com.toptal.dreamteamapi.service.impl.TransferListServiceImpl;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,11 +35,11 @@ class TransferListServiceTest {
   @Mock
   private TransferListRepository transferListRepository;
   @Mock
-  private TeamService teamService;
+  private TeamServiceImpl teamService;
   @Mock
-  private PlayerService playerService;
+  private PlayerServiceImpl playerService;
   @InjectMocks
-  private TransferListService classUnderTest;
+  private TransferListServiceImpl classUnderTest;
 
   @Test
   public void putOnSalePlayer() {

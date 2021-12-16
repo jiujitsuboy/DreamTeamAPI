@@ -7,7 +7,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.toptal.dreamteamapi.controller.TeamController;
 import com.toptal.dreamteamapi.entity.PlayerEntity;
 import com.toptal.dreamteamapi.model.Player;
-import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.service.Util;
 import java.util.Collections;
 import java.util.List;

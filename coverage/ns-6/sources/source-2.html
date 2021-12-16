@@ -1,0 +1,198 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TeamRepresentationModelAssembler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.toptal.dreamteamapi.hateoas</a>
+</div>
+
+<h1>Coverage Summary for Class: TeamRepresentationModelAssembler (com.toptal.dreamteamapi.hateoas)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TeamRepresentationModelAssembler</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71,4%
+  </span>
+  <span class="absValue">
+    (10/14)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$0r38EUa7</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$4cn7WHTA</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$EVlAImMb</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$f8DoLlx2</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$fmDD62V4</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$Q1JHOYb8</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$REQazVnA</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$skinkLjz</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$Smhul1uN</td>
+  </tr>
+  <tr>
+    <td class="name">TeamRepresentationModelAssembler$MockitoMock$190629652$auxiliary$WnRNXre9</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71,4%
+  </span>
+  <span class="absValue">
+    (10/14)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.toptal.dreamteamapi.hateoas;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import static java.util.stream.Collectors.toList;
+<i class="no-highlight">4</i>&nbsp;import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+<i class="no-highlight">5</i>&nbsp;import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;import com.toptal.dreamteamapi.controller.PlayerController;
+<i class="no-highlight">8</i>&nbsp;import com.toptal.dreamteamapi.controller.TeamController;
+<i class="no-highlight">9</i>&nbsp;import com.toptal.dreamteamapi.entity.PlayerEntity;
+<i class="no-highlight">10</i>&nbsp;import com.toptal.dreamteamapi.entity.TeamEntity;
+<i class="no-highlight">11</i>&nbsp;import com.toptal.dreamteamapi.model.Player;
+<i class="no-highlight">12</i>&nbsp;import com.toptal.dreamteamapi.model.Team;
+<i class="no-highlight">13</i>&nbsp;import com.toptal.dreamteamapi.service.Util;
+<i class="no-highlight">14</i>&nbsp;import java.util.Collections;
+<i class="no-highlight">15</i>&nbsp;import java.util.List;
+<i class="no-highlight">16</i>&nbsp;import java.util.Objects;
+<i class="no-highlight">17</i>&nbsp;import java.util.stream.Collectors;
+<i class="no-highlight">18</i>&nbsp;import java.util.stream.StreamSupport;
+<i class="no-highlight">19</i>&nbsp;import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+<i class="no-highlight">20</i>&nbsp;import org.springframework.stereotype.Component;
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;@Component
+<i class="no-highlight">23</i>&nbsp;public class TeamRepresentationModelAssembler extends RepresentationModelAssemblerSupport&lt;TeamEntity, Team&gt; {
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;  private PlayerRepresentationModelAssembler playerAssembler;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;  public TeamRepresentationModelAssembler(PlayerRepresentationModelAssembler playerAssembler) {
+<b class="fc"><i class="no-highlight">28</i>&nbsp;    super(PlayerController.class, Team.class);</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;    this.playerAssembler = playerAssembler;</b>
+<i class="no-highlight">30</i>&nbsp;  }
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;  @Override
+<i class="no-highlight">33</i>&nbsp;  public Team toModel(TeamEntity entity) {
+<b class="fc"><i class="no-highlight">34</i>&nbsp;    Team team = (Team) Util.toModel(entity);</b>
+<b class="fc"><i class="no-highlight">35</i>&nbsp;    team.getUser().setPassword(&quot;Ciphered...&quot;);</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;    team.setPlayers(team.getPlayers().stream().map(player -&gt; {</b>
+<b class="nc"><i class="no-highlight">37</i>&nbsp;      player.setTeam(null);</b>
+<b class="nc"><i class="no-highlight">38</i>&nbsp;      player.add(linkTo(methodOn(PlayerController.class).getPlayer(player.getId().toString())).withSelfRel());</b>
+<b class="nc"><i class="no-highlight">39</i>&nbsp;      return player;</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;    }).collect(Collectors.toList()));</b>
+<i class="no-highlight">41</i>&nbsp;
+<b class="fc"><i class="no-highlight">42</i>&nbsp;    return team;</b>
+<i class="no-highlight">43</i>&nbsp;  }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;  public List&lt;Team&gt; toListModel(Iterable&lt;TeamEntity&gt; entities) {
+<b class="fc"><i class="no-highlight">46</i>&nbsp;    if (Objects.isNull(entities)) {</b>
+<b class="nc"><i class="no-highlight">47</i>&nbsp;      return Collections.emptyList();</b>
+<i class="no-highlight">48</i>&nbsp;    }
+<b class="fc"><i class="no-highlight">49</i>&nbsp;    return StreamSupport.stream(entities.spliterator(), false).map(e -&gt; toModel(e))</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;        .collect(toList());</b>
+<i class="no-highlight">51</i>&nbsp;  }
+<i class="no-highlight">52</i>&nbsp;
+<i class="no-highlight">53</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-16 13:32</div>
+</div>
+</body>
+</html>

@@ -29,11 +29,4 @@ public class UserTokenEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   private UserEntity user;
-
-  public UserTokenEntity setId(UUID id, UserEntity user, String refreshToken) {
-    this.id = id;
-    this.refreshToken = refreshToken;
-    this.user = user;
-    return this;
-  }
 }

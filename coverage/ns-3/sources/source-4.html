@@ -1,0 +1,169 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TransferListController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.toptal.dreamteamapi.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: TransferListController (com.toptal.dreamteamapi.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TransferListController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.toptal.dreamteamapi.controller;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import static org.springframework.http.ResponseEntity.status;
+<i class="no-highlight">4</i>&nbsp;import static org.springframework.http.ResponseEntity.ok;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;import com.toptal.dreamteamapi.model.Player;
+<i class="no-highlight">7</i>&nbsp;import com.toptal.dreamteamapi.model.PlayerPurchase;
+<i class="no-highlight">8</i>&nbsp;import com.toptal.dreamteamapi.model.TransferList;
+<i class="no-highlight">9</i>&nbsp;import com.toptal.dreamteamapi.service.TransferListService;
+<i class="no-highlight">10</i>&nbsp;import com.toptal.dreamteamapi.service.impl.TransferListServiceImpl;
+<i class="no-highlight">11</i>&nbsp;import io.swagger.annotations.Api;
+<i class="no-highlight">12</i>&nbsp;import io.swagger.annotations.ApiOperation;
+<i class="no-highlight">13</i>&nbsp;import io.swagger.annotations.ApiResponse;
+<i class="no-highlight">14</i>&nbsp;import io.swagger.annotations.ApiResponses;
+<i class="no-highlight">15</i>&nbsp;import java.util.List;
+<i class="no-highlight">16</i>&nbsp;import javax.validation.Valid;
+<i class="no-highlight">17</i>&nbsp;import org.springframework.http.HttpStatus;
+<i class="no-highlight">18</i>&nbsp;import org.springframework.http.ResponseEntity;
+<i class="no-highlight">19</i>&nbsp;import org.springframework.web.bind.annotation.DeleteMapping;
+<i class="no-highlight">20</i>&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+<i class="no-highlight">21</i>&nbsp;import org.springframework.web.bind.annotation.PathVariable;
+<i class="no-highlight">22</i>&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+<i class="no-highlight">23</i>&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+<i class="no-highlight">24</i>&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+<i class="no-highlight">25</i>&nbsp;import org.springframework.web.bind.annotation.RestController;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;@RestController
+<i class="no-highlight">28</i>&nbsp;@RequestMapping(&quot;/api/v1/player&quot;)
+<i class="no-highlight">29</i>&nbsp;@Api(value = &quot;Transfer List Controller&quot;)
+<i class="no-highlight">30</i>&nbsp;public class TransferListController {
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;  private final TransferListService service;
+<i class="no-highlight">33</i>&nbsp;
+<b class="fc"><i class="no-highlight">34</i>&nbsp;  public TransferListController(TransferListService service) {</b>
+<b class="fc"><i class="no-highlight">35</i>&nbsp;    this.service = service;</b>
+<i class="no-highlight">36</i>&nbsp;  }
+<i class="no-highlight">37</i>&nbsp;
+<i class="no-highlight">38</i>&nbsp;  @ApiOperation(value = &quot;Get Transfer List&quot;, nickname = &quot;getTransferList&quot;, notes = &quot;Retrieve the list with all the available player for transfer-&quot;)
+<i class="no-highlight">39</i>&nbsp;  @ApiResponses(value = {
+<i class="no-highlight">40</i>&nbsp;      @ApiResponse(code = 202, message = &quot;Retrieve transfer list.&quot;)})
+<i class="no-highlight">41</i>&nbsp;  @GetMapping(value = &quot;/transfer-list&quot;)
+<i class="no-highlight">42</i>&nbsp;  public ResponseEntity&lt;List&lt;TransferList&gt;&gt; getTransferList() {
+<b class="fc"><i class="no-highlight">43</i>&nbsp;    return ok(service.getTransferList());</b>
+<i class="no-highlight">44</i>&nbsp;  }
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;  @ApiOperation(value = &quot;Transfer Player&quot;, nickname = &quot;transferPlayer&quot;, notes = &quot;Transfer a player to the Transfer list-&quot;)
+<i class="no-highlight">48</i>&nbsp;  @ApiResponses(value = {
+<i class="no-highlight">49</i>&nbsp;      @ApiResponse(code = 202, message = &quot;Transfer a player to the  list.&quot;),
+<i class="no-highlight">50</i>&nbsp;      @ApiResponse(code = 500, message = &quot;No Such Player Exception&quot;)})
+<i class="no-highlight">51</i>&nbsp;  @PostMapping(value = &quot;/transfer-list/{playerId}&quot;)
+<i class="no-highlight">52</i>&nbsp;  public ResponseEntity&lt;Player&gt; transferPlayer(@PathVariable(&quot;playerId&quot;) String playerId) {
+<b class="fc"><i class="no-highlight">53</i>&nbsp;    return status(HttpStatus.ACCEPTED).body(service.putOnSalePlayer(playerId));</b>
+<i class="no-highlight">54</i>&nbsp;  }
+<i class="no-highlight">55</i>&nbsp;
+<i class="no-highlight">56</i>&nbsp;  @ApiOperation(value = &quot;Buy Player&quot;, nickname = &quot;buyPlayer&quot;, notes = &quot;Buy a player offered in the Transfer list-&quot;)
+<i class="no-highlight">57</i>&nbsp;  @ApiResponses(value = {
+<i class="no-highlight">58</i>&nbsp;      @ApiResponse(code = 202, message = &quot;buy player from the  list.&quot;),
+<i class="no-highlight">59</i>&nbsp;      @ApiResponse(code = 500, message = &quot;No Such Player Exception&quot;)})
+<i class="no-highlight">60</i>&nbsp;  @DeleteMapping(value = &quot;/transfer-list&quot;)
+<i class="no-highlight">61</i>&nbsp;  public ResponseEntity&lt;Player&gt; buyPlayer(@Valid @RequestBody(required = false) PlayerPurchase playerPurchase) {
+<b class="fc"><i class="no-highlight">62</i>&nbsp;    return ok(service.buyPlayer(playerPurchase.getPlayerid(), playerPurchase.getTeamid()));</b>
+<i class="no-highlight">63</i>&nbsp;  }
+<i class="no-highlight">64</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-16 13:32</div>
+</div>
+</body>
+</html>

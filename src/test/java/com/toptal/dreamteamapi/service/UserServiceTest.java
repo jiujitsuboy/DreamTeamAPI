@@ -19,6 +19,8 @@ import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.repository.UserRepository;
 import com.toptal.dreamteamapi.repository.UserTokenRepository;
 import com.toptal.dreamteamapi.security.JwtManager;
+import com.toptal.dreamteamapi.service.impl.TeamServiceImpl;
+import com.toptal.dreamteamapi.service.impl.UserServiceImpl;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -34,7 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class UserServiceTest {
 
   @Mock
-  private TeamService teamService;
+  private TeamServiceImpl teamService;
   @Mock
   private UserRepository userRepository;
   @Mock
@@ -44,7 +46,7 @@ class UserServiceTest {
   @Mock
   private JwtManager tokenManager;
   @InjectMocks
-  private UserService classUnderTest;
+  private UserServiceImpl classUnderTest;
 
   @Test
   public void signUp() {
@@ -64,7 +66,7 @@ class UserServiceTest {
     assertEquals(returnedUserEntity.getId(), userUUID);
     assertEquals(returnedUserEntity.getPassword(), TestConstants.CYPHERED_PASSWORD);
     assertEquals(returnedUserEntity.getUsername(), TestConstants.USER_NAME_A);
-
+    assertNull(returnedUserEntity.getTeam());
   }
 
   @Test
@@ -151,6 +153,9 @@ class UserServiceTest {
     assertEquals(returnedOptionalSignedInUser.get().getUserName(), TestConstants.USER_NAME_A);
     assertEquals(returnedOptionalSignedInUser.get().getAccessToken(), TestConstants.ACCESS_TOKEN);
     assertEquals(returnedOptionalSignedInUser.get().getRefreshToken(), TestConstants.REFRESH_TOKEN);
+    assertNotNull(userTokenEntity.getId());
+    assertEquals(returnedOptionalSignedInUser.get().getUserName(),userTokenEntity.getUser().getUsername());
+    assertEquals(returnedOptionalSignedInUser.get().getRefreshToken(),userTokenEntity.getRefreshToken());
   }
 
   @Test

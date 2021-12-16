@@ -10,6 +10,7 @@ import com.toptal.dreamteamapi.model.SignInReq;
 import com.toptal.dreamteamapi.model.SignedInUser;
 import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.service.UserService;
+import com.toptal.dreamteamapi.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

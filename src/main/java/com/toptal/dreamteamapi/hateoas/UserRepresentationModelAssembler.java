@@ -7,6 +7,7 @@ import com.toptal.dreamteamapi.model.SignInReq;
 import com.toptal.dreamteamapi.model.SignedInUser;
 import com.toptal.dreamteamapi.model.User;
 import com.toptal.dreamteamapi.service.UserService;
+import com.toptal.dreamteamapi.service.impl.UserServiceImpl;
 import com.toptal.dreamteamapi.service.Util;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;

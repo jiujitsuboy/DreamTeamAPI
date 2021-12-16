@@ -1,0 +1,171 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Util</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.toptal.dreamteamapi.service</a>
+</div>
+
+<h1>Coverage Summary for Class: Util (com.toptal.dreamteamapi.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Util</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,4%
+  </span>
+  <span class="absValue">
+    (32/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.toptal.dreamteamapi.service;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.toptal.dreamteamapi.entity.PlayerEntity;
+<i class="no-highlight">4</i>&nbsp;import com.toptal.dreamteamapi.entity.TeamEntity;
+<i class="no-highlight">5</i>&nbsp;import com.toptal.dreamteamapi.entity.TransferListEntity;
+<i class="no-highlight">6</i>&nbsp;import com.toptal.dreamteamapi.entity.UserEntity;
+<i class="no-highlight">7</i>&nbsp;import com.toptal.dreamteamapi.model.Player;
+<i class="no-highlight">8</i>&nbsp;import com.toptal.dreamteamapi.model.Team;
+<i class="no-highlight">9</i>&nbsp;import com.toptal.dreamteamapi.model.TransferList;
+<i class="no-highlight">10</i>&nbsp;import com.toptal.dreamteamapi.model.User;
+<i class="no-highlight">11</i>&nbsp;import java.util.List;
+<i class="no-highlight">12</i>&nbsp;import java.util.stream.Collectors;
+<i class="no-highlight">13</i>&nbsp;import org.springframework.beans.BeanUtils;
+<i class="no-highlight">14</i>&nbsp;
+<b class="nc"><i class="no-highlight">15</i>&nbsp;public class Util {</b>
+<i class="no-highlight">16</i>&nbsp;
+<b class="fc"><i class="no-highlight">17</i>&nbsp;  public static final List&lt;String&gt; COUNTRIES = List.of(&quot;Colombia&quot;, &quot;Argentina&quot;, &quot;Brazil&quot;, &quot;Chile&quot;);</b>
+<b class="fc"><i class="no-highlight">18</i>&nbsp;  public static final List&lt;String&gt; NAMES = List.of(&quot;Patrick Mahomes&quot;,</b>
+<i class="no-highlight">19</i>&nbsp;      &quot;Tom Brady&quot;,
+<i class="no-highlight">20</i>&nbsp;      &quot;Ezekiel Elliott&quot;,
+<i class="no-highlight">21</i>&nbsp;      &quot;Saquon Barkley&quot;,
+<i class="no-highlight">22</i>&nbsp;      &quot;Aaron Rodgers&quot;,
+<i class="no-highlight">23</i>&nbsp;      &quot;Drew Brees&quot;,
+<i class="no-highlight">24</i>&nbsp;      &quot;Todd Gurley&quot;,
+<i class="no-highlight">25</i>&nbsp;      &quot;Khalil Mack&quot;);
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;  public static &lt;M&gt; Object toEntity(M model) {
+<b class="fc"><i class="no-highlight">28</i>&nbsp;    Object entity = null;</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;    if (model instanceof Team) {</b>
+<b class="nc"><i class="no-highlight">30</i>&nbsp;      entity = new TeamEntity();</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;    } else if (model instanceof Player) {</b>
+<b class="nc"><i class="no-highlight">32</i>&nbsp;      entity = new PlayerEntity();</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;    } else if (model instanceof User) {</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;      entity = new UserEntity();</b>
+<i class="no-highlight">35</i>&nbsp;    }
+<b class="fc"><i class="no-highlight">36</i>&nbsp;    BeanUtils.copyProperties(model, entity);</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;    return entity;</b>
+<i class="no-highlight">38</i>&nbsp;  }
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;  public static &lt;E&gt; Object toModel(E entity) {
+<b class="fc"><i class="no-highlight">41</i>&nbsp;    Object model = null;</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;    if (entity instanceof TeamEntity) {</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;      model = new Team();</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;      ((Team) model).setUser((User) toModel(((TeamEntity) entity).getUser()));</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;      ((Team) model).setPlayers(</b>
+<b class="fc"><i class="no-highlight">46</i>&nbsp;          ((TeamEntity) entity).getPlayers().stream().map(player -&gt; (Player) toModel(player)).collect(Collectors.toList()));</b>
+<b class="fc"><i class="no-highlight">47</i>&nbsp;    } else if (entity instanceof PlayerEntity) {</b>
+<b class="fc"><i class="no-highlight">48</i>&nbsp;      model = new Player();</b>
+<b class="fc"><i class="no-highlight">49</i>&nbsp;      TeamEntity teamEntity = ((PlayerEntity) entity).getTeam();</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;      UserEntity userEntity = ((PlayerEntity) entity).getTeam().getUser();</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;      Team team = new Team();</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;      User user = new User();</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;      BeanUtils.copyProperties(teamEntity, team);</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;      BeanUtils.copyProperties(userEntity, user);</b>
+<b class="fc"><i class="no-highlight">55</i>&nbsp;      team.setUser(user);</b>
+<b class="fc"><i class="no-highlight">56</i>&nbsp;      ((Player) model).setTeam(team);</b>
+<b class="fc"><i class="no-highlight">57</i>&nbsp;    } else if (entity instanceof UserEntity) {</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;      model = new User();</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;    } else if (entity instanceof TransferListEntity) {</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;      model = new TransferList();</b>
+<b class="fc"><i class="no-highlight">61</i>&nbsp;      ((TransferList) model).setPlayer((Player) toModel(((TransferListEntity) entity).getPlayer()));</b>
+<i class="no-highlight">62</i>&nbsp;    }
+<b class="fc"><i class="no-highlight">63</i>&nbsp;    BeanUtils.copyProperties(entity, model);</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;    return model;</b>
+<i class="no-highlight">65</i>&nbsp;  }
+<i class="no-highlight">66</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-16 13:32</div>
+</div>
+</body>
+</html>

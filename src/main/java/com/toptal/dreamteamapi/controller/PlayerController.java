@@ -7,6 +7,7 @@ import com.toptal.dreamteamapi.exception.NoSuchPlayerException;
 import com.toptal.dreamteamapi.hateoas.PlayerRepresentationModelAssembler;
 import com.toptal.dreamteamapi.model.Player;
 import com.toptal.dreamteamapi.service.PlayerService;
+import com.toptal.dreamteamapi.service.impl.PlayerServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
