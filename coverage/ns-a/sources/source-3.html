@@ -42,7 +42,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (4/4)
+    (5/5)
   </span>
 </td>
 <td class="coverageStat">
@@ -50,12 +50,12 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (19/19)
+    (25/25)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">TransferListServiceImpl$$EnhancerBySpringCGLIB$$c5554e42</td>
+    <td class="name">TransferListServiceImpl$$EnhancerBySpringCGLIB$$4f648f87</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -64,7 +64,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (4/4)
+    (5/5)
   </span>
 </td>
 <td class="coverageStat">
@@ -72,7 +72,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (19/19)
+    (25/25)
   </span>
 </td>
 </tr>
@@ -122,28 +122,34 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc"><i class="no-highlight">37</i>&nbsp;    transferListEntity.setPlayer(playerEntity);</b>
 <b class="fc"><i class="no-highlight">38</i>&nbsp;    transferListEntity.setValue(playerEntity.getValue());</b>
 <b class="fc"><i class="no-highlight">39</i>&nbsp;    transferListRepository.save(transferListEntity);</b>
-<b class="fc"><i class="no-highlight">40</i>&nbsp;    return (Player) Util.toModel(playerEntity);</b>
-<i class="no-highlight">41</i>&nbsp;  }
-<i class="no-highlight">42</i>&nbsp;
-<i class="no-highlight">43</i>&nbsp;  @Override
-<i class="no-highlight">44</i>&nbsp;  @Transactional
-<i class="no-highlight">45</i>&nbsp;  public Player buyPlayer(String playerId, String teamId) {
-<b class="fc"><i class="no-highlight">46</i>&nbsp;    TransferListEntity transferListEntity = transferListRepository.findByPlayerId(UUID.fromString(playerId))</b>
-<b class="fc"><i class="no-highlight">47</i>&nbsp;        .orElseThrow(() -&gt; new NoSuchPlayerException(String.format(&quot;Player with id %s doesn&#39;t exists in Transfer List&quot;, playerId)));</b>
-<b class="fc"><i class="no-highlight">48</i>&nbsp;    Player player = teamService.buyPlayer(playerId, teamId);</b>
-<b class="fc"><i class="no-highlight">49</i>&nbsp;    transferListRepository.delete(transferListEntity);</b>
-<b class="fc"><i class="no-highlight">50</i>&nbsp;    return player;</b>
-<i class="no-highlight">51</i>&nbsp;  }
-<i class="no-highlight">52</i>&nbsp;
-<i class="no-highlight">53</i>&nbsp;  @Override
-<i class="no-highlight">54</i>&nbsp;  public List&lt;TransferList&gt; getTransferList(){
-<b class="fc"><i class="no-highlight">55</i>&nbsp;    List&lt;TransferList&gt; transferLists = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i class="no-highlight">56</i>&nbsp;    Iterable&lt;TransferListEntity&gt; transferListEntities = transferListRepository.findAll();</b>
-<b class="fc"><i class="no-highlight">57</i>&nbsp;    transferListEntities.forEach(transfer-&gt;transferLists.add((TransferList) Util.toModel(transfer)));</b>
-<b class="fc"><i class="no-highlight">58</i>&nbsp;    return transferLists;</b>
-<i class="no-highlight">59</i>&nbsp;  }
-<i class="no-highlight">60</i>&nbsp;
-<i class="no-highlight">61</i>&nbsp;}
+<b class="fc"><i class="no-highlight">40</i>&nbsp;    Player player = (Player) Util.toModel(playerEntity);</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;    player.getTeam().getUser().setPassword(&quot;Ciphered...&quot;);</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;    return player;</b>
+<i class="no-highlight">43</i>&nbsp;  }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;  @Override
+<i class="no-highlight">46</i>&nbsp;  @Transactional
+<i class="no-highlight">47</i>&nbsp;  public Player buyPlayer(String playerId, String teamId) {
+<b class="fc"><i class="no-highlight">48</i>&nbsp;    TransferListEntity transferListEntity = transferListRepository.findByPlayerId(UUID.fromString(playerId))</b>
+<b class="fc"><i class="no-highlight">49</i>&nbsp;        .orElseThrow(() -&gt; new NoSuchPlayerException(String.format(&quot;Player with id %s doesn&#39;t exists in Transfer List&quot;, playerId)));</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;    Player player = teamService.buyPlayer(playerId, teamId);</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;    player.getTeam().getUser().setPassword(&quot;Ciphered...&quot;);</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;    transferListRepository.delete(transferListEntity);</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;    return player;</b>
+<i class="no-highlight">54</i>&nbsp;  }
+<i class="no-highlight">55</i>&nbsp;
+<i class="no-highlight">56</i>&nbsp;  @Override
+<i class="no-highlight">57</i>&nbsp;  public List&lt;TransferList&gt; getTransferList(){
+<b class="fc"><i class="no-highlight">58</i>&nbsp;    List&lt;TransferList&gt; transferLists = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;    Iterable&lt;TransferListEntity&gt; transferListEntities = transferListRepository.findAll();</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;    transferListEntities.forEach(transfer-&gt;{</b>
+<b class="fc"><i class="no-highlight">61</i>&nbsp;      TransferList transferList = (TransferList) Util.toModel(transfer);</b>
+<b class="fc"><i class="no-highlight">62</i>&nbsp;      transferList.getPlayer().getTeam().getUser().setPassword(&quot;Ciphered...&quot;);</b>
+<b class="fc"><i class="no-highlight">63</i>&nbsp;      transferLists.add(transferList);});</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;    return transferLists;</b>
+<i class="no-highlight">65</i>&nbsp;  }
+<i class="no-highlight">66</i>&nbsp;
+<i class="no-highlight">67</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -170,7 +176,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-12-17 13:14</div>
+    <div style="float:right;">generated on 2021-12-17 18:09</div>
 </div>
 </body>
 </html>

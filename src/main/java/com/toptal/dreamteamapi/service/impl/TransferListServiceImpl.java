@@ -37,7 +37,9 @@ public class TransferListServiceImpl implements TransferListService {
     transferListEntity.setPlayer(playerEntity);
     transferListEntity.setValue(playerEntity.getValue());
     transferListRepository.save(transferListEntity);
-    return (Player) Util.toModel(playerEntity);
+    Player player = (Player) Util.toModel(playerEntity);
+    player.getTeam().getUser().setPassword("Ciphered...");
+    return player;
   }
 
   @Override
@@ -46,6 +48,7 @@ public class TransferListServiceImpl implements TransferListService {
     TransferListEntity transferListEntity = transferListRepository.findByPlayerId(UUID.fromString(playerId))
         .orElseThrow(() -> new NoSuchPlayerException(String.format("Player with id %s doesn't exists in Transfer List", playerId)));
     Player player = teamService.buyPlayer(playerId, teamId);
+    player.getTeam().getUser().setPassword("Ciphered...");
     transferListRepository.delete(transferListEntity);
     return player;
   }
@@ -54,7 +57,10 @@ public class TransferListServiceImpl implements TransferListService {
   public List<TransferList> getTransferList(){
     List<TransferList> transferLists = new ArrayList<>();
     Iterable<TransferListEntity> transferListEntities = transferListRepository.findAll();
-    transferListEntities.forEach(transfer->transferLists.add((TransferList) Util.toModel(transfer)));
+    transferListEntities.forEach(transfer->{
+      TransferList transferList = (TransferList) Util.toModel(transfer);
+      transferList.getPlayer().getTeam().getUser().setPassword("Ciphered...");
+      transferLists.add(transferList);});
     return transferLists;
   }
 

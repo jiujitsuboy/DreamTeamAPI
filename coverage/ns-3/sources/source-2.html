@@ -50,18 +50,18 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (8/8)
+    (6/6)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">PlayerController$$EnhancerBySpringCGLIB$$fd60dc1</td>
+    <td class="name">PlayerController$$EnhancerBySpringCGLIB$$d5fb0497</td>
   </tr>
   <tr>
-    <td class="name">PlayerController$$EnhancerBySpringCGLIB$$fd60dc1$$FastClassBySpringCGLIB$$d7155cf3</td>
+    <td class="name">PlayerController$$EnhancerBySpringCGLIB$$d5fb0497$$FastClassBySpringCGLIB$$da1fe936</td>
   </tr>
   <tr>
-    <td class="name">PlayerController$$EnhancerBySpringCGLIB$$fd60dc1_2</td>
+    <td class="name">PlayerController$$EnhancerBySpringCGLIB$$d5fb0497_2</td>
   </tr>
   <tr>
     <td class="name">PlayerController$$FastClassBySpringCGLIB$$de161bb2</td>
@@ -81,7 +81,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (8/8)
+    (6/6)
   </span>
 </td>
 </tr>
@@ -148,25 +148,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">54</i>&nbsp;      @ApiResponse(code = 400, message = &quot;No Such Player Exception.&quot;) })
 <i class="no-highlight">55</i>&nbsp;  @GetMapping(value = &quot;/{playerId}&quot;)
 <i class="no-highlight">56</i>&nbsp;  public ResponseEntity&lt;Player&gt; getPlayer(@PathVariable(&quot;playerId&quot;) String playerId) {
-<i class="no-highlight">57</i>&nbsp;
-<i class="no-highlight">58</i>&nbsp;    try{;
-<b class="fc"><i class="no-highlight">59</i>&nbsp;      return ok(playerAssembler.toModel(service.getPlayerById(UUID.fromString(playerId))));</b>
-<i class="no-highlight">60</i>&nbsp;    }
-<b class="fc"><i class="no-highlight">61</i>&nbsp;    catch (NoSuchPlayerException ex){</b>
-<b class="fc"><i class="no-highlight">62</i>&nbsp;      return status(HttpStatus.BAD_REQUEST).build();</b>
-<i class="no-highlight">63</i>&nbsp;    }
-<i class="no-highlight">64</i>&nbsp;
-<i class="no-highlight">65</i>&nbsp;  }
-<i class="no-highlight">66</i>&nbsp;
-<i class="no-highlight">67</i>&nbsp;  @PreAuthorize(&quot;hasRole(&#39;&quot;+ Const.ADMIN+&quot;&#39;)&quot;)
-<i class="no-highlight">68</i>&nbsp;  @ApiOperation(value = &quot;Get All players&quot;, nickname = &quot;getAllPlayer&quot;, notes = &quot;Retrieve all players-&quot;)
-<i class="no-highlight">69</i>&nbsp;  @ApiResponses(value = {
-<i class="no-highlight">70</i>&nbsp;      @ApiResponse(code = 200, message = &quot;Retrieve all players.&quot;)})
-<i class="no-highlight">71</i>&nbsp;  @GetMapping(value = &quot;/&quot;)
-<i class="no-highlight">72</i>&nbsp;  public ResponseEntity&lt;List&lt;Player&gt;&gt; getAllPlayer() {
-<b class="fc"><i class="no-highlight">73</i>&nbsp;      return ok(playerAssembler.toListModel(service.getAllPlayers()));</b>
-<i class="no-highlight">74</i>&nbsp;  }
-<i class="no-highlight">75</i>&nbsp;}
+<b class="fc"><i class="no-highlight">57</i>&nbsp;      return ok(playerAssembler.toModel(service.getPlayerById(UUID.fromString(playerId))));</b>
+<i class="no-highlight">58</i>&nbsp;  }
+<i class="no-highlight">59</i>&nbsp;
+<i class="no-highlight">60</i>&nbsp;  @PreAuthorize(&quot;hasRole(&#39;&quot;+ Const.ADMIN+&quot;&#39;)&quot;)
+<i class="no-highlight">61</i>&nbsp;  @ApiOperation(value = &quot;Get All players&quot;, nickname = &quot;getAllPlayer&quot;, notes = &quot;Retrieve all players-&quot;)
+<i class="no-highlight">62</i>&nbsp;  @ApiResponses(value = {
+<i class="no-highlight">63</i>&nbsp;      @ApiResponse(code = 200, message = &quot;Retrieve all players.&quot;)})
+<i class="no-highlight">64</i>&nbsp;  @GetMapping(value = &quot;/&quot;)
+<i class="no-highlight">65</i>&nbsp;  public ResponseEntity&lt;List&lt;Player&gt;&gt; getAllPlayer() {
+<b class="fc"><i class="no-highlight">66</i>&nbsp;      return ok(playerAssembler.toListModel(service.getAllPlayers()));</b>
+<i class="no-highlight">67</i>&nbsp;  }
+<i class="no-highlight">68</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -193,7 +186,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-12-17 13:14</div>
+    <div style="float:right;">generated on 2021-12-17 18:09</div>
 </div>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > PlayerRepository</title>
+  <title>Coverage Report > UserTokenRepository</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,7 +20,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.toptal.dreamteamapi.repository</a>
 </div>
 
-<h1>Coverage Summary for Class: PlayerRepository (com.toptal.dreamteamapi.repository)</h1>
+<h1>Coverage Summary for Class: UserTokenRepository (com.toptal.dreamteamapi.repository)</h1>
 
 <table class="coverageStats">
 
@@ -28,13 +28,13 @@ Current scope:     <a href="../../index.html">all classes</a>
   <th class="name">Class</th>
 </tr>
   <tr>
-    <td class="name">PlayerRepository$MockitoMock$19726552</td>
+    <td class="name">UserTokenRepository$MockitoMock$1031265772</td>
   </tr>
   <tr>
-    <td class="name">PlayerRepository$MockitoMock$19726552$auxiliary$OVf0ny2Q</td>
+    <td class="name">UserTokenRepository$MockitoMock$1031265772$auxiliary$KwvNH0Op</td>
   </tr>
   <tr>
-    <td class="name">PlayerRepository$MockitoMock$19726552$auxiliary$wwAqEOQV</td>
+    <td class="name">UserTokenRepository$MockitoMock$1031265772$auxiliary$N5GQHapC</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -48,15 +48,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.toptal.dreamteamapi.repository;
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;import com.toptal.dreamteamapi.entity.PlayerEntity;
+<i class="no-highlight">3</i>&nbsp;import com.toptal.dreamteamapi.entity.UserTokenEntity;
 <i class="no-highlight">4</i>&nbsp;import java.util.Optional;
 <i class="no-highlight">5</i>&nbsp;import java.util.UUID;
 <i class="no-highlight">6</i>&nbsp;import org.springframework.data.repository.CrudRepository;
 <i class="no-highlight">7</i>&nbsp;
-<i class="no-highlight">8</i>&nbsp;public interface PlayerRepository extends CrudRepository&lt;PlayerEntity, UUID&gt; {
+<i class="no-highlight">8</i>&nbsp;public interface UserTokenRepository extends CrudRepository&lt;UserTokenEntity, UUID&gt; {
 <i class="no-highlight">9</i>&nbsp;
-<i class="no-highlight">10</i>&nbsp;  Optional&lt;PlayerEntity&gt; findByFirstnameAndLastname(String firstname, String lastname);
-<i class="no-highlight">11</i>&nbsp;}
+<i class="no-highlight">10</i>&nbsp;  Optional&lt;UserTokenEntity&gt; findByRefreshToken(String refreshToken);
+<i class="no-highlight">11</i>&nbsp;  Optional&lt;UserTokenEntity&gt; deleteByUserId(UUID userId);
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;}
+<i class="no-highlight">14</i>&nbsp;
 </div>
 </pre>
 </div>
@@ -83,7 +86,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-12-17 13:14</div>
+    <div style="float:right;">generated on 2021-12-17 18:09</div>
 </div>
 </body>
 </html>

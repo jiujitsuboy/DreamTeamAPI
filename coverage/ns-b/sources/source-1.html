@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > UserTokenRepository</title>
+  <title>Coverage Report > TeamRepository</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,7 +20,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.toptal.dreamteamapi.repository</a>
 </div>
 
-<h1>Coverage Summary for Class: UserTokenRepository (com.toptal.dreamteamapi.repository)</h1>
+<h1>Coverage Summary for Class: TeamRepository (com.toptal.dreamteamapi.repository)</h1>
 
 <table class="coverageStats">
 
@@ -28,13 +28,13 @@ Current scope:     <a href="../../index.html">all classes</a>
   <th class="name">Class</th>
 </tr>
   <tr>
-    <td class="name">UserTokenRepository$MockitoMock$1464044719</td>
+    <td class="name">TeamRepository$MockitoMock$1206442253</td>
   </tr>
   <tr>
-    <td class="name">UserTokenRepository$MockitoMock$1464044719$auxiliary$49vvpn58</td>
+    <td class="name">TeamRepository$MockitoMock$1206442253$auxiliary$GheIDqVk</td>
   </tr>
   <tr>
-    <td class="name">UserTokenRepository$MockitoMock$1464044719$auxiliary$OtsMhmd2</td>
+    <td class="name">TeamRepository$MockitoMock$1206442253$auxiliary$Nw5oOSC5</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -48,18 +48,17 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.toptal.dreamteamapi.repository;
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;import com.toptal.dreamteamapi.entity.UserTokenEntity;
-<i class="no-highlight">4</i>&nbsp;import java.util.Optional;
-<i class="no-highlight">5</i>&nbsp;import java.util.UUID;
-<i class="no-highlight">6</i>&nbsp;import org.springframework.data.repository.CrudRepository;
-<i class="no-highlight">7</i>&nbsp;
-<i class="no-highlight">8</i>&nbsp;public interface UserTokenRepository extends CrudRepository&lt;UserTokenEntity, UUID&gt; {
-<i class="no-highlight">9</i>&nbsp;
-<i class="no-highlight">10</i>&nbsp;  Optional&lt;UserTokenEntity&gt; findByRefreshToken(String refreshToken);
-<i class="no-highlight">11</i>&nbsp;  Optional&lt;UserTokenEntity&gt; deleteByUserId(UUID userId);
-<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.toptal.dreamteamapi.entity.TeamEntity;
+<i class="no-highlight">4</i>&nbsp;import com.toptal.dreamteamapi.model.User;
+<i class="no-highlight">5</i>&nbsp;import java.util.Optional;
+<i class="no-highlight">6</i>&nbsp;import java.util.UUID;
+<i class="no-highlight">7</i>&nbsp;import org.springframework.data.repository.CrudRepository;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;public interface TeamRepository extends CrudRepository&lt;TeamEntity, UUID&gt; {
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;  Optional&lt;TeamEntity&gt; findByUser(User user);
+<i class="no-highlight">12</i>&nbsp;  Optional&lt;TeamEntity&gt; findByUserId(UUID userId);
 <i class="no-highlight">13</i>&nbsp;}
-<i class="no-highlight">14</i>&nbsp;
 </div>
 </pre>
 </div>
@@ -86,7 +85,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-12-17 13:14</div>
+    <div style="float:right;">generated on 2021-12-17 18:09</div>
 </div>
 </body>
 </html>

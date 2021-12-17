@@ -54,14 +54,7 @@ public class PlayerController {
       @ApiResponse(code = 400, message = "No Such Player Exception.") })
   @GetMapping(value = "/{playerId}")
   public ResponseEntity<Player> getPlayer(@PathVariable("playerId") String playerId) {
-
-    try{;
       return ok(playerAssembler.toModel(service.getPlayerById(UUID.fromString(playerId))));
-    }
-    catch (NoSuchPlayerException ex){
-      return status(HttpStatus.BAD_REQUEST).build();
-    }
-
   }
 
   @PreAuthorize("hasRole('"+ Const.ADMIN+"')")
