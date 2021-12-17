@@ -55,7 +55,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">TeamController$$EnhancerBySpringCGLIB$$67ff5e9e</td>
+    <td class="name">TeamController$$EnhancerBySpringCGLIB$$ee79ac75</td>
+  </tr>
+  <tr>
+    <td class="name">TeamController$$EnhancerBySpringCGLIB$$ee79ac75$$FastClassBySpringCGLIB$$13ee398d</td>
+  </tr>
+  <tr>
+    <td class="name">TeamController$$EnhancerBySpringCGLIB$$ee79ac75_2</td>
+  </tr>
+  <tr>
+    <td class="name">TeamController$$EnhancerBySpringCGLIB$$fef0b405</td>
+  </tr>
+  <tr>
+    <td class="name">TeamController$$FastClassBySpringCGLIB$$925f296e</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -88,66 +100,69 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">3</i>&nbsp;import static org.springframework.http.ResponseEntity.ok;
 <i class="no-highlight">4</i>&nbsp;import static org.springframework.http.ResponseEntity.status;
 <i class="no-highlight">5</i>&nbsp;
-<i class="no-highlight">6</i>&nbsp;import com.toptal.dreamteamapi.hateoas.TeamRepresentationModelAssembler;
-<i class="no-highlight">7</i>&nbsp;import com.toptal.dreamteamapi.model.Team;
-<i class="no-highlight">8</i>&nbsp;import com.toptal.dreamteamapi.service.TeamService;
-<i class="no-highlight">9</i>&nbsp;import com.toptal.dreamteamapi.service.impl.TeamServiceImpl;
-<i class="no-highlight">10</i>&nbsp;import io.swagger.annotations.Api;
-<i class="no-highlight">11</i>&nbsp;import io.swagger.annotations.ApiOperation;
-<i class="no-highlight">12</i>&nbsp;import io.swagger.annotations.ApiResponse;
-<i class="no-highlight">13</i>&nbsp;import io.swagger.annotations.ApiResponses;
-<i class="no-highlight">14</i>&nbsp;import java.util.List;
-<i class="no-highlight">15</i>&nbsp;import javax.validation.Valid;
-<i class="no-highlight">16</i>&nbsp;import org.springframework.http.HttpStatus;
-<i class="no-highlight">17</i>&nbsp;import org.springframework.http.ResponseEntity;
-<i class="no-highlight">18</i>&nbsp;import org.springframework.web.bind.annotation.GetMapping;
-<i class="no-highlight">19</i>&nbsp;import org.springframework.web.bind.annotation.PatchMapping;
-<i class="no-highlight">20</i>&nbsp;import org.springframework.web.bind.annotation.PathVariable;
-<i class="no-highlight">21</i>&nbsp;import org.springframework.web.bind.annotation.RequestBody;
-<i class="no-highlight">22</i>&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
-<i class="no-highlight">23</i>&nbsp;import org.springframework.web.bind.annotation.RestController;
-<i class="no-highlight">24</i>&nbsp;
-<i class="no-highlight">25</i>&nbsp;@RestController
-<i class="no-highlight">26</i>&nbsp;@RequestMapping(&quot;/api/v1&quot;)
-<i class="no-highlight">27</i>&nbsp;@Api(value = &quot;Team Controller&quot;)
-<i class="no-highlight">28</i>&nbsp;public class TeamController {
-<i class="no-highlight">29</i>&nbsp;
-<i class="no-highlight">30</i>&nbsp;  private final TeamService service;
-<i class="no-highlight">31</i>&nbsp;  private final TeamRepresentationModelAssembler teamAssembler;
-<i class="no-highlight">32</i>&nbsp;
-<b class="fc"><i class="no-highlight">33</i>&nbsp;  public TeamController(TeamService service, TeamRepresentationModelAssembler teamAssembler) {</b>
-<b class="fc"><i class="no-highlight">34</i>&nbsp;    this.teamAssembler = teamAssembler;</b>
-<b class="fc"><i class="no-highlight">35</i>&nbsp;    this.service = service;</b>
-<i class="no-highlight">36</i>&nbsp;  }
-<i class="no-highlight">37</i>&nbsp;
-<i class="no-highlight">38</i>&nbsp;  @ApiOperation(value = &quot;Update Team&quot;, nickname = &quot;updateTeam&quot;, notes = &quot;Allow to update name and country of the team-&quot;)
-<i class="no-highlight">39</i>&nbsp;  @ApiResponses(value = {
-<i class="no-highlight">40</i>&nbsp;      @ApiResponse(code = 202, message = &quot;Update a couple of attributes of the team.&quot;),
-<i class="no-highlight">41</i>&nbsp;      @ApiResponse(code = 500, message = &quot;No Such Team Exception.&quot;) })
-<i class="no-highlight">42</i>&nbsp;  @PatchMapping(value = &quot;/team&quot;)
-<i class="no-highlight">43</i>&nbsp;  public ResponseEntity&lt;Team&gt; updateTeam(@Valid @RequestBody(required = false) Team team) {
-<b class="fc"><i class="no-highlight">44</i>&nbsp;    return status(HttpStatus.ACCEPTED).body(teamAssembler.toModel(service.updateTeam(team)));</b>
-<i class="no-highlight">45</i>&nbsp;  }
-<i class="no-highlight">46</i>&nbsp;
-<i class="no-highlight">47</i>&nbsp;  @ApiOperation(value = &quot;Get Team&quot;, nickname = &quot;getTeam&quot;, notes = &quot;Retrieve a single team identified by the specified user ID-&quot;)
-<i class="no-highlight">48</i>&nbsp;  @ApiResponses(value = {
-<i class="no-highlight">49</i>&nbsp;      @ApiResponse(code = 202, message = &quot;Retrieve the specified team.&quot;),
-<i class="no-highlight">50</i>&nbsp;      @ApiResponse(code = 500, message = &quot;No Such Team Exception.&quot;) })
-<i class="no-highlight">51</i>&nbsp;  @GetMapping(value = &quot;/team/{userId}&quot;)
-<i class="no-highlight">52</i>&nbsp;  public ResponseEntity&lt;Team&gt; getTeam(@PathVariable(&quot;userId&quot;) String userId) {
-<i class="no-highlight">53</i>&nbsp;
-<b class="fc"><i class="no-highlight">54</i>&nbsp;    return ok(teamAssembler.toModel(service.getUserTeam(userId)));</b>
-<i class="no-highlight">55</i>&nbsp;  }
-<i class="no-highlight">56</i>&nbsp;
-<i class="no-highlight">57</i>&nbsp;  @ApiOperation(value = &quot;Get All Teams&quot;, nickname = &quot;getAllTeams&quot;, notes = &quot;Retrieve all the teams-&quot;)
-<i class="no-highlight">58</i>&nbsp;  @ApiResponses(value = {
-<i class="no-highlight">59</i>&nbsp;      @ApiResponse(code = 202, message = &quot;Retrieve all the team.&quot;)})
-<i class="no-highlight">60</i>&nbsp;  @GetMapping(value = &quot;/teams&quot;)
-<i class="no-highlight">61</i>&nbsp;  public ResponseEntity&lt;List&lt;Team&gt;&gt; getAllTeams() {
-<i class="no-highlight">62</i>&nbsp;
-<b class="fc"><i class="no-highlight">63</i>&nbsp;    return ok(teamAssembler.toListModel(service.getAllTeams()));</b>
-<i class="no-highlight">64</i>&nbsp;  }
-<i class="no-highlight">65</i>&nbsp;}
+<i class="no-highlight">6</i>&nbsp;import com.toptal.dreamteamapi.entity.RoleEnum.Const;
+<i class="no-highlight">7</i>&nbsp;import com.toptal.dreamteamapi.hateoas.TeamRepresentationModelAssembler;
+<i class="no-highlight">8</i>&nbsp;import com.toptal.dreamteamapi.model.Team;
+<i class="no-highlight">9</i>&nbsp;import com.toptal.dreamteamapi.service.TeamService;
+<i class="no-highlight">10</i>&nbsp;import com.toptal.dreamteamapi.service.impl.TeamServiceImpl;
+<i class="no-highlight">11</i>&nbsp;import io.swagger.annotations.Api;
+<i class="no-highlight">12</i>&nbsp;import io.swagger.annotations.ApiOperation;
+<i class="no-highlight">13</i>&nbsp;import io.swagger.annotations.ApiResponse;
+<i class="no-highlight">14</i>&nbsp;import io.swagger.annotations.ApiResponses;
+<i class="no-highlight">15</i>&nbsp;import java.util.List;
+<i class="no-highlight">16</i>&nbsp;import javax.validation.Valid;
+<i class="no-highlight">17</i>&nbsp;import org.springframework.http.HttpStatus;
+<i class="no-highlight">18</i>&nbsp;import org.springframework.http.ResponseEntity;
+<i class="no-highlight">19</i>&nbsp;import org.springframework.security.access.prepost.PreAuthorize;
+<i class="no-highlight">20</i>&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+<i class="no-highlight">21</i>&nbsp;import org.springframework.web.bind.annotation.PatchMapping;
+<i class="no-highlight">22</i>&nbsp;import org.springframework.web.bind.annotation.PathVariable;
+<i class="no-highlight">23</i>&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+<i class="no-highlight">24</i>&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+<i class="no-highlight">25</i>&nbsp;import org.springframework.web.bind.annotation.RestController;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;@RestController
+<i class="no-highlight">28</i>&nbsp;@RequestMapping(&quot;/api/v1&quot;)
+<i class="no-highlight">29</i>&nbsp;@Api(value = &quot;Team Controller&quot;)
+<i class="no-highlight">30</i>&nbsp;public class TeamController {
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;  private final TeamService service;
+<i class="no-highlight">33</i>&nbsp;  private final TeamRepresentationModelAssembler teamAssembler;
+<i class="no-highlight">34</i>&nbsp;
+<b class="fc"><i class="no-highlight">35</i>&nbsp;  public TeamController(TeamService service, TeamRepresentationModelAssembler teamAssembler) {</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;    this.teamAssembler = teamAssembler;</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;    this.service = service;</b>
+<i class="no-highlight">38</i>&nbsp;  }
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;  @ApiOperation(value = &quot;Update Team&quot;, nickname = &quot;updateTeam&quot;, notes = &quot;Allow to update name and country of the team-&quot;)
+<i class="no-highlight">41</i>&nbsp;  @ApiResponses(value = {
+<i class="no-highlight">42</i>&nbsp;      @ApiResponse(code = 202, message = &quot;Update a couple of attributes of the team.&quot;),
+<i class="no-highlight">43</i>&nbsp;      @ApiResponse(code = 500, message = &quot;No Such Team Exception.&quot;) })
+<i class="no-highlight">44</i>&nbsp;  @PatchMapping(value = &quot;/team&quot;)
+<i class="no-highlight">45</i>&nbsp;  public ResponseEntity&lt;Team&gt; updateTeam(@Valid @RequestBody(required = false) Team team) {
+<b class="fc"><i class="no-highlight">46</i>&nbsp;    return status(HttpStatus.ACCEPTED).body(teamAssembler.toModel(service.updateTeam(team)));</b>
+<i class="no-highlight">47</i>&nbsp;  }
+<i class="no-highlight">48</i>&nbsp;
+<i class="no-highlight">49</i>&nbsp;  @ApiOperation(value = &quot;Get Team&quot;, nickname = &quot;getTeam&quot;, notes = &quot;Retrieve a single team identified by the specified user ID-&quot;)
+<i class="no-highlight">50</i>&nbsp;  @ApiResponses(value = {
+<i class="no-highlight">51</i>&nbsp;      @ApiResponse(code = 202, message = &quot;Retrieve the specified team.&quot;),
+<i class="no-highlight">52</i>&nbsp;      @ApiResponse(code = 500, message = &quot;No Such Team Exception.&quot;) })
+<i class="no-highlight">53</i>&nbsp;  @GetMapping(value = &quot;/team/{userId}&quot;)
+<i class="no-highlight">54</i>&nbsp;  public ResponseEntity&lt;Team&gt; getTeam(@PathVariable(&quot;userId&quot;) String userId) {
+<i class="no-highlight">55</i>&nbsp;
+<b class="fc"><i class="no-highlight">56</i>&nbsp;    return ok(teamAssembler.toModel(service.getUserTeam(userId)));</b>
+<i class="no-highlight">57</i>&nbsp;  }
+<i class="no-highlight">58</i>&nbsp;
+<i class="no-highlight">59</i>&nbsp;  @PreAuthorize(&quot;hasRole(&#39;&quot;+Const.ADMIN+&quot;&#39;)&quot;)
+<i class="no-highlight">60</i>&nbsp;  @ApiOperation(value = &quot;Get All Teams&quot;, nickname = &quot;getAllTeams&quot;, notes = &quot;Retrieve all the teams-&quot;)
+<i class="no-highlight">61</i>&nbsp;  @ApiResponses(value = {
+<i class="no-highlight">62</i>&nbsp;      @ApiResponse(code = 202, message = &quot;Retrieve all the team.&quot;)})
+<i class="no-highlight">63</i>&nbsp;  @GetMapping(value = &quot;/teams&quot;)
+<i class="no-highlight">64</i>&nbsp;  public ResponseEntity&lt;List&lt;Team&gt;&gt; getAllTeams() {
+<i class="no-highlight">65</i>&nbsp;
+<b class="fc"><i class="no-highlight">66</i>&nbsp;    return ok(teamAssembler.toListModel(service.getAllTeams()));</b>
+<i class="no-highlight">67</i>&nbsp;  }
+<i class="no-highlight">68</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -174,7 +189,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-12-16 13:32</div>
+    <div style="float:right;">generated on 2021-12-17 13:14</div>
 </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.toptal.dreamteamapi.service.impl;
 
+import com.toptal.dreamteamapi.entity.RoleEnum;
 import com.toptal.dreamteamapi.entity.UserEntity;
 import com.toptal.dreamteamapi.entity.UserTokenEntity;
 import com.toptal.dreamteamapi.exception.GenericAlreadyExistsException;
@@ -106,8 +107,11 @@ public class UserServiceImpl implements UserService {
   @Transactional
   protected UserEntity createUser(User user) {
     Integer count = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
-    if (count > 0) {
+     if (count > 0) {
       throw new GenericAlreadyExistsException("Use different username and email.");
+    }
+    if(user.getRole()==null) {
+      user.setRole(RoleEnum.USER);
     }
     UserEntity userEntity = (UserEntity) Util.toEntity(user);
     userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

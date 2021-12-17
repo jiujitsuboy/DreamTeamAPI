@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class TestConstants {
+
   public static final String PLAYER_FIRST_NAME = "Lionel";
   public static final String PLAYER_LAST_NAME = "Messi";
   public static final String PLAYER_COUNTRY = "Argentina";
@@ -26,8 +27,8 @@ public class TestConstants {
   public static final long NEW_TEAM_VALUE = 24_000_000L;
   public static final long OLD_TEAM_BUDGET = 5_000_000L;
   public static final long NEW_TEAM_BUDGET = 1_000_000L;
-  public static final String OLD_TEAM_NAME ="TeamA";
-  public static final String NEW_TEAM_NAME ="TeamA";
+  public static final String OLD_TEAM_NAME = "TeamA";
+  public static final String NEW_TEAM_NAME = "TeamA";
   public static final String OLD_TEAM_COUNTRY = "Colombia";
   public static final String NEW_TEAM_COUNTRY = "Argentina";
   public static final List<Player> TEAM_PLAYERS = new ArrayList<>();
@@ -50,7 +51,7 @@ public class TestConstants {
   public static final String REFRESH_TOKEN = "26rvap1cr3maf85akd9jb27c7dlrlkfn82hn3rahrb9qhr0rcmtl82jjt75tapoqtqktkh6rgdicb7mm1i38qqhdpgb7v8q3omoffu7dj1o8is3h763o54l978tfp95v";
 
 
-  public static User getTestUser(UUID userUUID, String username, String password, String firstname, String lastname, String email){
+  public static User getTestUser(UUID userUUID, String username, String password, String firstname, String lastname, String email) {
 
     User user = new User();
     user.setId(userUUID);
@@ -59,11 +60,13 @@ public class TestConstants {
     user.setFirstName(firstname);
     user.setLastName(lastname);
     user.setEmail(email);
+    user.setRole(RoleEnum.USER);
 
     return user;
   }
 
-  public static Team getTestTeam(UUID teamUUID,String teamName, long teamValue, String teamCountry, List<Player> players,long budget,User user){
+  public static Team getTestTeam(UUID teamUUID, String teamName, long teamValue, String teamCountry, List<Player> players, long budget,
+      User user) {
 
     Team team = new Team();
     team.setId(teamUUID);
@@ -78,7 +81,9 @@ public class TestConstants {
   }
 
 
-  public static Player getTestPlayer(UUID playerUUID,String country,String firstName, String lastName, long playerValue, byte age, Team team){
+  public static Player getTestPlayer(UUID playerUUID, String country, String firstName, String lastName, long playerValue, byte age,
+      Team team) {
+
     Player player = new Player();
     player.setId(playerUUID);
     player.setCountry(country);
@@ -92,7 +97,7 @@ public class TestConstants {
     return player;
   }
 
-  public static UserEntity getTestUserEntity(User user){
+  public static UserEntity getTestUserEntity(User user) {
     UserEntity userEntity = new UserEntity();
     userEntity.setId(user.getId());
     userEntity.setUsername(user.getUsername());
@@ -105,7 +110,8 @@ public class TestConstants {
     return userEntity;
   }
 
-  public static UserEntity getTestUserEntity(UUID userUUID, String username, String password, String firstname, String lastname, String email){
+  public static UserEntity getTestUserEntity(UUID userUUID, String username, String password, String firstname, String lastname,
+      String email) {
 
     UserEntity user = new UserEntity();
     user.setId(userUUID);
@@ -118,19 +124,20 @@ public class TestConstants {
     return user;
   }
 
-  public static TeamEntity getTestTeamEntity(Team team, UserEntity userEntity){
+  public static TeamEntity getTestTeamEntity(Team team, UserEntity userEntity) {
     TeamEntity teamEntity = new TeamEntity();
     teamEntity.setName(team.getName());
     teamEntity.setValue(team.getValue());
     teamEntity.setCountry(team.getCountry());
     teamEntity.setBudget(team.getBudget());
-    teamEntity.setPlayers(team.getPlayers().stream().map(player -> (PlayerEntity)Util.toEntity(player)).collect(Collectors.toList()));
+    teamEntity.setPlayers(team.getPlayers().stream().map(player -> (PlayerEntity) Util.toEntity(player)).collect(Collectors.toList()));
     teamEntity.setUser(userEntity);
 
     return teamEntity;
   }
 
-  public static TeamEntity getTestTeamEntity(UUID teamUUID,String teamName, long teamValue, String teamCountry, List<PlayerEntity> players,long budget,UserEntity user){
+  public static TeamEntity getTestTeamEntity(UUID teamUUID, String teamName, long teamValue, String teamCountry, List<PlayerEntity> players,
+      long budget, UserEntity user) {
 
     TeamEntity team = new TeamEntity();
     team.setId(teamUUID);
@@ -144,7 +151,7 @@ public class TestConstants {
     return team;
   }
 
-  public static PlayerEntity getTestPlayerEntity(Player player, TeamEntity teamEntity){
+  public static PlayerEntity getTestPlayerEntity(Player player, TeamEntity teamEntity) {
 
     PlayerEntity playerEntity = new PlayerEntity();
     playerEntity.setFirstname(player.getFirstname());
@@ -157,7 +164,8 @@ public class TestConstants {
     return playerEntity;
   }
 
-  public static PlayerEntity getTestPlayerEntity(UUID playerUUID,String country,String firstName, String lastName, long playerValue, byte age, TeamEntity team){
+  public static PlayerEntity getTestPlayerEntity(UUID playerUUID, String country, String firstName, String lastName, long playerValue,
+      byte age, TeamEntity team) {
     PlayerEntity player = new PlayerEntity();
     player.setId(playerUUID);
     player.setCountry(country);
@@ -171,7 +179,7 @@ public class TestConstants {
     return player;
   }
 
-  public static TransferList getTransferList(UUID transferListID,Player player) {
+  public static TransferList getTransferList(UUID transferListID, Player player) {
     TransferList transferList = new TransferList();
     transferList.setId(transferListID);
     transferList.setPlayer(player);
@@ -179,11 +187,10 @@ public class TestConstants {
     return transferList;
   }
 
-  public static String getToken(JwtManager tokenManager){
+  public static String getToken(JwtManager tokenManager, String role) {
 
     String username = "bruce1";
     String password = "tiger";
-    String role = RoleEnum.USER.name();
 
     return tokenManager.create(org.springframework.security.core.userdetails.User.builder()
         .username(username)

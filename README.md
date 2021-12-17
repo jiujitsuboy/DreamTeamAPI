@@ -9,7 +9,11 @@ This API allows user to create their football dreamed team. The following are th
 * Update Team's player's names and country. These values are generated randomly when the team is created.
 * Have the possibility to sell and buy players. Your team would have a initial budget which can be used to buy new players.
 * Consult the list of available player to buy and their respective price (Transfer List).
+* Consult all the **teams** (User's available) and **players**. *ADMIN ONLY*
 
+They are two roles available in this API:
+1. **USER:** Allow to manage his team and buy players
+2. **ADMIN:** Users rights plus querying the Team and players info from all Users.
 ### API endpoints
 
 The following list depict the available endpoints of the API:
@@ -23,12 +27,12 @@ The following list depict the available endpoints of the API:
 2. Team
 * [Get User's Team (GET)](http://localhost:8082/api/v1/team/{{userId}})
 * [Update User's Team (PATCH)](http://localhost:8082/api/v1/team)
-* [Update All Teams (GET)](http://localhost:8082/api/v1/teams)
+* [Get All Teams (GET)](http://localhost:8082/api/v1/teams) *ADMIN ONLY*
 
 3. Player
 * [Get Player (GET)](http://localhost:8082/api/v1/player/{{userId}})
 * [Update Player (PATCH)](http://localhost:8082/api/v1/player/)
-* [Update All Players (GET)](http://localhost:8082/api/v1/player/)
+* [Get All Players (GET)](http://localhost:8082/api/v1/player/) *ADMIN ONLY*
 
 4. Transfer List
 * [Get Transfer List (GET)](http://localhost:8082/api/v1/player/transfer-list)

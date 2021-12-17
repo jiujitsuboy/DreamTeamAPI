@@ -3,6 +3,7 @@ package com.toptal.dreamteamapi.controller;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
+import com.toptal.dreamteamapi.entity.RoleEnum.Const;
 import com.toptal.dreamteamapi.exception.NoSuchPlayerException;
 import com.toptal.dreamteamapi.hateoas.PlayerRepresentationModelAssembler;
 import com.toptal.dreamteamapi.model.Player;
@@ -17,6 +18,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,6 +64,7 @@ public class PlayerController {
 
   }
 
+  @PreAuthorize("hasRole('"+ Const.ADMIN+"')")
   @ApiOperation(value = "Get All players", nickname = "getAllPlayer", notes = "Retrieve all players-")
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Retrieve all players.")})

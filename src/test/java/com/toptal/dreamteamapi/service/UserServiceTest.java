@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
 import com.toptal.dreamteamapi.TestConstants;
+import com.toptal.dreamteamapi.entity.RoleEnum;
 import com.toptal.dreamteamapi.entity.UserEntity;
 import com.toptal.dreamteamapi.entity.UserTokenEntity;
 import com.toptal.dreamteamapi.exception.GenericAlreadyExistsException;
@@ -49,12 +50,33 @@ class UserServiceTest {
   private UserServiceImpl classUnderTest;
 
   @Test
-  public void signUp() {
+  public void signUpRoleUser() {
     final int ZERO_RECORD = 0;
 
     UUID userUUID = UUID.randomUUID();
     User user = TestConstants.getTestUser(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    user.setRole(null);
+    doNothing().when(teamService).createTeamForUser(any(UserEntity.class));
+    when(userRepository.findByUsernameOrEmail(anyString(), anyString())).thenReturn(ZERO_RECORD);
+    when(bCryptPasswordEncoder.encode(anyString())).thenReturn(TestConstants.CYPHERED_PASSWORD);
+    when(userRepository.save(any(UserEntity.class))).thenReturn(null);
 
+    UserEntity returnedUserEntity = classUnderTest.signUp(user);
+
+    assertNotNull(returnedUserEntity);
+    assertEquals(returnedUserEntity.getId(), userUUID);
+    assertEquals(returnedUserEntity.getPassword(), TestConstants.CYPHERED_PASSWORD);
+    assertEquals(returnedUserEntity.getUsername(), TestConstants.USER_NAME_A);
+    assertNull(returnedUserEntity.getTeam());
+  }
+
+  @Test
+  public void signUpRoleAdmin() {
+    final int ZERO_RECORD = 0;
+
+    UUID userUUID = UUID.randomUUID();
+    User user = TestConstants.getTestUser(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    user.setRole(RoleEnum.ADMIN);
     doNothing().when(teamService).createTeamForUser(any(UserEntity.class));
     when(userRepository.findByUsernameOrEmail(anyString(), anyString())).thenReturn(ZERO_RECORD);
     when(bCryptPasswordEncoder.encode(anyString())).thenReturn(TestConstants.CYPHERED_PASSWORD);
@@ -85,7 +107,7 @@ class UserServiceTest {
   public void signUser() {
 
     final boolean passwordsMatch = true;
-    final String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzY290dDEiLCJyb2xlcyI6WyJVU0VSIl0sImlzcyI6IkRyZWFtIFRlYW0gQVBJIiwiZXhwIjoxNjM5NDQ1NjA1LCJpYXQiOjE2Mzk0NDQ3MDV9.jFJV4vhRMllJf1SaR5An9GrSB10fX66GCYOJYbj0t3JDwSmN_b1DYrkseCJQgDbWj6pFF8gGV0gb19N99dAga-x6w3rK7bjL0zO7y03bhXYEWSOqCzSlw8FqiFGSTpcNqykU6hLFn8AuiAIGjT1Y9jyhPhbKlb7Lq7IhUcmJrMJsHkXXBlk5237NTtp_LZjK0Kl3gZm7vmkdYInliWbVsNr4ehc24vcfykMPMHgZugpSYyN62b4O58HWYHnBwuxYYWtkyRFyCl_z75K8GsOyuOZ80HqsjDHXMuK1v7LVlOgy5tJsnDypqJIBe1-hj-KWyvSyZnXpUQqTTGby2cRKcBGH0QYSWiy1pASGNjYPcqAHa2j4UFQwQFKSO6XNO6BKtQ0i6xiTgnF0tOKRK1Y4Orjegr6KmQvYom5ZX6rcTZniH86VSiQVTq4cAzKTzTsfguv_GGzwqfv3gDkwjhH1Vs1CDDXLLb5OXudnpu62o4PBPlUUKbSwE9ntj1aDWDdTsxl86Jsx3fMMOvkYHY9Bba8T82JNIlmFNQXF9sscBdUNyQx55UMLbEz7N72KI1DWgU2UU5Qh2KIhdkD7yL3CDL5-B7y7vBe3Etb1Sc4HZfAHNFjcFXK1elaIzZUFGaqswLswy8wRbYyU7Qa29pesGsKwmXNej8h6fpzoQZKy6hg";
+    final String accessToken = TestConstants.ACCESS_TOKEN;
 
     UserEntity userEntity = TestConstants.getTestUserEntity(UUID.randomUUID(),TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
 
@@ -114,7 +136,7 @@ class UserServiceTest {
   }
 
   @Test
-  public void signUserUserpasswordNotFoundException() {
+  public void signUserUserPasswordNotFoundException() {
     String userName = TestConstants.USER_NAME_A;
     String password = null;
 
@@ -122,12 +144,30 @@ class UserServiceTest {
   }
 
   @Test
-  public void signUserInsufficientAuthenticationException() {
+  public void signUserNotExistsInsufficientAuthenticationException() {
 
     String userName = TestConstants.USER_NAME_A;
     String password = TestConstants.USER_PASSWORD_A;
 
     when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+
+    assertThrows(InsufficientAuthenticationException.class, () -> classUnderTest.signUser(userName, password));
+
+  }
+
+  @Test
+  public void signUserPasswordDontMatchInsufficientAuthenticationException() {
+
+    String userName = TestConstants.USER_NAME_A;
+    String password = TestConstants.USER_PASSWORD_A;
+
+    final boolean passwordsMatch = false;
+    final String accessToken = TestConstants.ACCESS_TOKEN;
+
+    UserEntity userEntity = TestConstants.getTestUserEntity(UUID.randomUUID(),TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+
+    when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(userEntity));
+    when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(passwordsMatch);
 
     assertThrows(InsufficientAuthenticationException.class, () -> classUnderTest.signUser(userName, password));
 

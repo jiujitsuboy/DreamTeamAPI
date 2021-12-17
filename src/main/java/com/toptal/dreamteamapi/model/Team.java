@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Team  extends RepresentationModel<Team> {
 
   private UUID id;

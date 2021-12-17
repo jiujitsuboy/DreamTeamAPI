@@ -42,6 +42,7 @@ public class UserEntity {
   private String email;
 
   @Column(name = "ROLE")
+  @Basic(optional = false)
   @Enumerated(EnumType.STRING)
   private RoleEnum role = RoleEnum.USER;
 

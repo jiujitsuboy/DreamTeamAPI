@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toptal.dreamteamapi.TestConstants;
 import com.toptal.dreamteamapi.configuration.AppConfig;
+import com.toptal.dreamteamapi.entity.RoleEnum;
 import com.toptal.dreamteamapi.model.Player;
 import com.toptal.dreamteamapi.model.PlayerPurchase;
 import com.toptal.dreamteamapi.model.Team;
@@ -54,7 +55,7 @@ class TransferListControllerTest {
 
   @BeforeEach
   public void getToken() {
-    token = TestConstants.getToken(tokenManager);
+    token = TestConstants.getToken(tokenManager, RoleEnum.USER.name());
   }
 
   @Test

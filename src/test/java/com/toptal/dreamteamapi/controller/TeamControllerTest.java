@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toptal.dreamteamapi.TestConstants;
 import com.toptal.dreamteamapi.configuration.AppConfig;
+import com.toptal.dreamteamapi.entity.RoleEnum;
 import com.toptal.dreamteamapi.entity.TeamEntity;
 import com.toptal.dreamteamapi.entity.UserEntity;
 import com.toptal.dreamteamapi.hateoas.PlayerRepresentationModelAssembler;
@@ -60,7 +61,7 @@ class TeamControllerTest {
 
   @BeforeEach
   public void getToken(){
-    token = TestConstants.getToken(tokenManager);
+    token = TestConstants.getToken(tokenManager, RoleEnum.USER.name());
   }
 
   @Test
@@ -111,10 +112,13 @@ class TeamControllerTest {
     UUID teamUUID = UUID.randomUUID();
 
     User user = TestConstants.getTestUser(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    user.setRole(RoleEnum.ADMIN);
     Team team = TestConstants.getTestTeam(teamUUID,TestConstants.OLD_TEAM_NAME,TestConstants.OLD_TEAM_VALUE,TestConstants.OLD_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS,TestConstants.OLD_TEAM_BUDGET, user);
 
     UserEntity userEntity = TestConstants.getTestUserEntity(user);
     TeamEntity teamEntity = TestConstants.getTestTeamEntity(team,userEntity);
+
+    token = TestConstants.getToken(tokenManager, user.getRole().name());
 
     when(service.getAllTeams()).thenReturn(List.of(teamEntity));
 

@@ -1,6 +1,7 @@
 package com.toptal.dreamteamapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.toptal.dreamteamapi.entity.RoleEnum;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,8 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class User extends RepresentationModel<User> {
 
   @JsonProperty("id")
@@ -24,5 +23,7 @@ public class User extends RepresentationModel<User> {
   private String email;
   @JsonProperty("password")
   private String password;
+  @JsonProperty("role")
+  private RoleEnum role;
 
 }

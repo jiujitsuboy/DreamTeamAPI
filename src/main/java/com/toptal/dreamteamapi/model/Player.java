@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Player extends RepresentationModel<Player> {
   private UUID id;
   private String firstname;

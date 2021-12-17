@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toptal.dreamteamapi.TestConstants;
 import com.toptal.dreamteamapi.configuration.AppConfig;
 import com.toptal.dreamteamapi.entity.PlayerEntity;
+import com.toptal.dreamteamapi.entity.RoleEnum;
 import com.toptal.dreamteamapi.entity.TeamEntity;
 import com.toptal.dreamteamapi.entity.UserEntity;
 import com.toptal.dreamteamapi.exception.NoSuchPlayerException;
@@ -59,7 +60,7 @@ class PlayerControllerTest {
 
   @BeforeEach
   public void getToken(){
-    token = TestConstants.getToken(tokenManager);
+    token = TestConstants.getToken(tokenManager, RoleEnum.USER.name());
   }
 
   @Test
@@ -136,12 +137,15 @@ class PlayerControllerTest {
     UUID playerUUID = UUID.randomUUID();
 
     User user = TestConstants.getTestUser(userUUID,TestConstants.USER_NAME_A, TestConstants.USER_PASSWORD_A, TestConstants.USER_FIRST_NAME_A, TestConstants.USER_LAST_NAME_A, TestConstants.USER_EMAIL_A);
+    user.setRole(RoleEnum.ADMIN);
     Team team = TestConstants.getTestTeam(teamUUID,TestConstants.OLD_TEAM_NAME,TestConstants.OLD_TEAM_VALUE,TestConstants.OLD_TEAM_COUNTRY,TestConstants.TEAM_PLAYERS,TestConstants.OLD_TEAM_BUDGET, user);
     Player player = TestConstants.getTestPlayer(playerUUID,TestConstants.PLAYER_COUNTRY,TestConstants.PLAYER_FIRST_NAME, TestConstants.PLAYER_LAST_NAME, TestConstants.PLAYER_VALUE, TestConstants.PLAYER_AGE, team);
 
     UserEntity userEntity = TestConstants.getTestUserEntity(user);
     TeamEntity teamEntity = TestConstants.getTestTeamEntity(team,userEntity);
     PlayerEntity playerEntity = TestConstants.getTestPlayerEntity(player,teamEntity);
+
+    token = TestConstants.getToken(tokenManager, user.getRole().name());
 
     when(service.getAllPlayers()).thenReturn(List.of(playerEntity));
 

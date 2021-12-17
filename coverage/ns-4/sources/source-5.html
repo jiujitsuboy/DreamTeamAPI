@@ -55,10 +55,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">UserEntity$HibernateProxy$1eWFI4zM</td>
+    <td class="name">UserEntity$HibernateProxy$tGYqRdcV</td>
   </tr>
   <tr>
-    <td class="name">UserEntity$HibernateProxy$Wmy9rmdD</td>
+    <td class="name">UserEntity$HibernateProxy$uazWOMuq</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -130,12 +130,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc"><i class="no-highlight">42</i>&nbsp;  private String email;</b>
 <i class="no-highlight">43</i>&nbsp;
 <b class="fc"><i class="no-highlight">44</i>&nbsp;  @Column(name = &quot;ROLE&quot;)</b>
-<i class="no-highlight">45</i>&nbsp;  @Enumerated(EnumType.STRING)
-<b class="fc"><i class="no-highlight">46</i>&nbsp;  private RoleEnum role = RoleEnum.USER;</b>
-<i class="no-highlight">47</i>&nbsp;
-<i class="no-highlight">48</i>&nbsp;  @OneToOne(mappedBy = &quot;user&quot;)
-<b class="fc"><i class="no-highlight">49</i>&nbsp;  private TeamEntity team;</b>
-<i class="no-highlight">50</i>&nbsp;}
+<i class="no-highlight">45</i>&nbsp;  @Basic(optional = false)
+<i class="no-highlight">46</i>&nbsp;  @Enumerated(EnumType.STRING)
+<b class="fc"><i class="no-highlight">47</i>&nbsp;  private RoleEnum role = RoleEnum.USER;</b>
+<i class="no-highlight">48</i>&nbsp;
+<i class="no-highlight">49</i>&nbsp;  @OneToOne(mappedBy = &quot;user&quot;)
+<b class="fc"><i class="no-highlight">50</i>&nbsp;  private TeamEntity team;</b>
+<i class="no-highlight">51</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -162,7 +163,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-12-16 13:32</div>
+    <div style="float:right;">generated on 2021-12-17 13:14</div>
 </div>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > TransferListRepository</title>
+  <title>Coverage Report > UserRepository</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,7 +20,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.toptal.dreamteamapi.repository</a>
 </div>
 
-<h1>Coverage Summary for Class: TransferListRepository (com.toptal.dreamteamapi.repository)</h1>
+<h1>Coverage Summary for Class: UserRepository (com.toptal.dreamteamapi.repository)</h1>
 
 <table class="coverageStats">
 
@@ -28,13 +28,13 @@ Current scope:     <a href="../../index.html">all classes</a>
   <th class="name">Class</th>
 </tr>
   <tr>
-    <td class="name">TransferListRepository$MockitoMock$253150532</td>
+    <td class="name">UserRepository$MockitoMock$1525574111</td>
   </tr>
   <tr>
-    <td class="name">TransferListRepository$MockitoMock$253150532$auxiliary$2u5LsH4X</td>
+    <td class="name">UserRepository$MockitoMock$1525574111$auxiliary$lAUHbvNf</td>
   </tr>
   <tr>
-    <td class="name">TransferListRepository$MockitoMock$253150532$auxiliary$ty7z88Nc</td>
+    <td class="name">UserRepository$MockitoMock$1525574111$auxiliary$RDwirGs8</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -48,16 +48,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.toptal.dreamteamapi.repository;
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;import com.toptal.dreamteamapi.entity.PlayerEntity;
-<i class="no-highlight">4</i>&nbsp;import com.toptal.dreamteamapi.entity.TransferListEntity;
-<i class="no-highlight">5</i>&nbsp;import java.util.Optional;
-<i class="no-highlight">6</i>&nbsp;import java.util.UUID;
+<i class="no-highlight">3</i>&nbsp;import com.toptal.dreamteamapi.entity.UserEntity;
+<i class="no-highlight">4</i>&nbsp;import java.util.Optional;
+<i class="no-highlight">5</i>&nbsp;import java.util.UUID;
+<i class="no-highlight">6</i>&nbsp;import org.springframework.data.jpa.repository.Query;
 <i class="no-highlight">7</i>&nbsp;import org.springframework.data.repository.CrudRepository;
 <i class="no-highlight">8</i>&nbsp;
-<i class="no-highlight">9</i>&nbsp;public interface TransferListRepository extends CrudRepository&lt;TransferListEntity, UUID&gt; {
+<i class="no-highlight">9</i>&nbsp;public interface UserRepository extends CrudRepository&lt;UserEntity, UUID&gt; {
 <i class="no-highlight">10</i>&nbsp;
-<i class="no-highlight">11</i>&nbsp;  Optional&lt;TransferListEntity&gt; findByPlayerId(UUID playerId);
-<i class="no-highlight">12</i>&nbsp;}
+<i class="no-highlight">11</i>&nbsp;  Optional&lt;UserEntity&gt; findByUsername(String username);
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;  @Query(value = &quot;select count(u.*) from user u where u.username = :username or u.email = :email&quot;, nativeQuery = true)
+<i class="no-highlight">14</i>&nbsp;  Integer findByUsernameOrEmail(String username, String email);
+<i class="no-highlight">15</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -84,7 +87,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-12-16 13:32</div>
+    <div style="float:right;">generated on 2021-12-17 13:14</div>
 </div>
 </body>
 </html>
