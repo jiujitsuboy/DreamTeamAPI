@@ -61,6 +61,7 @@ The following list depict the available endpoints of the API:
    ./mvnw spring-boot:run
    ```
 * The API by default will be reachable in the following URL *http://localhost:8082*
+* *(Optional)* Use [PostMan collection](postman/Total-DreamTeam.postman_collection.json) to hit the endpoints.
  
 
 
