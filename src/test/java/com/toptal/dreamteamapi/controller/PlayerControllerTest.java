@@ -126,7 +126,7 @@ class PlayerControllerTest {
     mvc.perform(get("/api/v1/player/{playerId}",playerUUID.toString())
             .contentType(MediaType.APPLICATION_JSON)
             .header(HttpHeaders.AUTHORIZATION,"Bearer "+ token))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
